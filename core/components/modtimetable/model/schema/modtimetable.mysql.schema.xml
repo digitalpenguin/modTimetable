@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="modtimetable" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM" phpdoc-package="modtimetable" version="0.1">
+
+    <object class="modTimetableTimetable" table="modtimetable_timetables" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
+        <field key="description" dbtype="text" phptype="text" null="false" default="" />
+        <field key="image" dbtype="text" phptype="string" null="true" />
+        <field key="position" dbtype="int" precision="10" phptype="integer" null="true"/>
+        <composite alias="modTimetableDay" class="modTimetableDay" local="id" foreign="timetable_id" cardinality="many" owner="local" />
+    </object>
+
+    <object class="modTimetableDay" table="modtimetable_days" extends="xPDOSimpleObject">
+        <field key="timetable_id" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <field key="num_in_week" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
+        <field key="description" dbtype="text" phptype="text" null="false" default="" />
+        <field key="image" dbtype="text" phptype="string" null="true" />
+        <field key="position" dbtype="int" precision="10" phptype="integer" null="true"/>
+        <aggregate alias="modTimetableTimetable" class="modTimetableTimetable" local="timetable_id" foreign="id" cardinality="one" owner="foreign" />
+        <composite alias="modTimetableSession" class="modTimetableSession" local="id" foreign="day_id" cardinality="many" owner="local" />
+    </object>
+
+    <object class="modTimetableSession" table="modtimetable_sessions" extends="xPDOSimpleObject">
+        <field key="day_id" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <field key="sessiontype_id" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
+        <field key="description" dbtype="text" phptype="text" null="false" default="" />
+        <field key="start_time" dbtype="time" phptype="datetime" null="true" />
+        <field key="end_time" dbtype="time" phptype="datetime" null="true" />
+        <field key="image" dbtype="text" phptype="string" null="true" />
+        <field key="position" dbtype="int" precision="10" phptype="integer" null="true"/>
+        <aggregate alias="modTimetableSessionType" class="modTimetableSessionType" local="sessiontype_id" foreign="id" cardinality="one" owner="foreign" />
+        <aggregate alias="modTimetableDay" class="modTimetableDay" local="day_id" foreign="id" cardinality="one" owner="foreign" />
+    </object>
+
+    <object class="modTimetableSessionType" table="modtimetable_sessiontypes" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="100" phptype="string" null="false" default="" />
+        <field key="description" dbtype="text" phptype="text" null="false" default="" />
+        <field key="start_time" dbtype="time" phptype="datetime" null="true" />
+        <field key="end_time" dbtype="time" phptype="datetime" null="true" />
+        <field key="image" dbtype="text" phptype="string" null="true" />
+        <field key="position" dbtype="int" precision="10" phptype="integer" null="true"/>
+        <composite alias="modTimetableSession" class="modTimetableSession" local="id" foreign="sessiontype_id" cardinality="many" owner="local" />
+    </object>
+
+
+</model>
