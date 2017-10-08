@@ -2,15 +2,16 @@
 /**
  * @package modtimetable
  */
-$xpdo_meta_map['modTimetableItem']= array (
+$xpdo_meta_map['modTimetableTimetable']= array (
   'package' => 'modtimetable',
-  'version' => NULL,
-  'table' => 'modtimetable_items',
+  'version' => '0.1',
+  'table' => 'modtimetable_timetables',
   'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'name' => '',
     'description' => '',
+    'image' => NULL,
     'position' => NULL,
   ),
   'fieldMeta' => 
@@ -30,12 +31,29 @@ $xpdo_meta_map['modTimetableItem']= array (
       'null' => false,
       'default' => '',
     ),
+    'image' => 
+    array (
+      'dbtype' => 'text',
+      'phptype' => 'string',
+      'null' => true,
+    ),
     'position' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
       'phptype' => 'integer',
-      'null' => false,
+      'null' => true,
+    ),
+  ),
+  'composites' => 
+  array (
+    'modTimetableDay' => 
+    array (
+      'class' => 'modTimetableDay',
+      'local' => 'id',
+      'foreign' => 'timetable_id',
+      'cardinality' => 'many',
+      'owner' => 'local',
     ),
   ),
 );

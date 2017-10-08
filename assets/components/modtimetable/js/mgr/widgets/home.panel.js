@@ -9,21 +9,35 @@ modTimetable.panel.Home = function(config) {
             ,border: false
             ,cls: 'modx-page-header'
         },{
-            xtype: 'modx-tabs'
-            ,defaults: { border: false ,autoHeight: true }
-            ,border: true
-            ,activeTab: 0
-            ,hideMode: 'offsets'
+            xtype: 'modx-panel'
             ,items: [{
-                title: _('modtimetable.item.items')
+                xtype: 'modx-breadcrumbs-panel',
+                style:'box-shadow: 1px 1px 2px #bbb;',
+                id: 'timetable-breadcrumbs',
+                desc: '<p>'+_('modtimetable.timetable.intro_msg')+'</p>',
+                root : {
+                    text : 'Timetable List'
+                    ,className: 'first'
+                    ,root: true
+                    ,pnl: 'modtimetable-grid-timetables'
+                }
+            },{
+                layout:'card'
+                ,id:'timetable-card-container'
+                ,style:'box-shadow: 1px 1px 2px #ccc;'
+                ,activeItem:0
+                ,border: false
+                ,autoHeight: true
+                ,defaults:{
+                    cls: 'main-wrapper'
+                    ,autoHeight: true
+                }
                 ,items: [{
-                    html: '<p>'+_('modtimetable.item.intro_msg')+'</p>'
-                    ,border: false
-                    ,bodyCssClass: 'panel-desc'
+                    xtype: 'modtimetable-grid-timetables',
+                    id: 'modtimetable-grid-timetables'
                 },{
-                    xtype: 'modtimetable-grid-items'
-                    ,preventRender: true
-                    ,cls: 'main-wrapper'
+                    xtype: 'modx-panel',
+                    id: 'modtimetable-panel-days'
                 }]
             }]
         }]

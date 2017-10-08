@@ -1,14 +1,14 @@
 <?php
 /**
- * Reorder items
+ * Reorder Days
  *
  * @package modtimetable
  * @subpackage processors
  */
-class modTimetableReorderItemUpdateProcessor extends modObjectProcessor {
-    public $classKey = 'modTimetableItem';
+class modTimetableReorderDayUpdateProcessor extends modObjectProcessor {
+    public $classKey = 'modTimetableDay';
     public $languageTopics = array('modtimetable:default');
-    public $objectType = 'modtimetable.item';
+    public $objectType = 'modtimetable.day';
 
     public function process(){
         $idItem = $this->getProperty('idItem');
@@ -24,7 +24,6 @@ class modTimetableReorderItemUpdateProcessor extends modObjectProcessor {
             ));
 
         $items->sortby('position', 'ASC');
-
         $itemsCollection = $this->modx->getCollection($this->classKey, $items);
 
         if(min($oldIndex, $newIndex) == $newIndex){
@@ -50,4 +49,4 @@ class modTimetableReorderItemUpdateProcessor extends modObjectProcessor {
     }
 
 }
-return 'modTimetableReorderItemUpdateProcessor';
+return 'modTimetableReorderDayUpdateProcessor';

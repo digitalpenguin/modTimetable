@@ -31,7 +31,7 @@
             "chunks": [
             
             {
-                "name": "Item"
+                "name": "Timetable"
             }
             
             ]
@@ -43,7 +43,7 @@
     }
     
     ,"database": {
-        "tables": ["modTimetableItem"]
+        "tables": ["modTimetableTimetable","modTimetableDay","modTimetableSession","modTimetableSessionType"]
     }
     
 }

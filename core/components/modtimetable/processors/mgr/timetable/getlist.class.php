@@ -1,16 +1,16 @@
 <?php
 /**
- * Get list Items
+ * Get list Timetables
  *
  * @package modtimetable
  * @subpackage processors
  */
-class modTimetableItemGetListProcessor extends modObjectGetListProcessor {
-    public $classKey = 'modTimetableItem';
+class modTimetableTimetableGetListProcessor extends modObjectGetListProcessor {
+    public $classKey = 'modTimetableTimetable';
     public $languageTopics = array('modtimetable:default');
     public $defaultSortField = 'position';
     public $defaultSortDirection = 'ASC';
-    public $objectType = 'modtimetable.item';
+    public $objectType = 'modtimetable.timetable';
 
     public function prepareQueryBeforeCount(xPDOQuery $c) {
         $query = $this->getProperty('query');
@@ -23,4 +23,4 @@ class modTimetableItemGetListProcessor extends modObjectGetListProcessor {
         return $c;
     }
 }
-return 'modTimetableItemGetListProcessor';
+return 'modTimetableTimetableGetListProcessor';

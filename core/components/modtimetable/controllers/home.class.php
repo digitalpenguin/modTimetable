@@ -15,8 +15,9 @@ class modTimetableHomeManagerController extends modTimetableBaseManagerControlle
     
     
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/extras/griddraganddrop.js');
-    
-        $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/items.grid.js');
+
+        $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/days.grid.js');
+        $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/timetables.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/home.panel.js');
         $this->addLastJavascript($this->modtimetable->getOption('jsUrl').'mgr/sections/home.js');
     
