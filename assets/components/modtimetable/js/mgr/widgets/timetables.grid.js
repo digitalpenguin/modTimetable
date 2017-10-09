@@ -58,11 +58,14 @@ modTimetable.grid.Timetables = function(config) {
             ,width: 50
             ,editor: { xtype: 'numberfield', allowDecimal: false, allowNegative: false }
         }]
-        ,tbar: ['->',{
+        ,tbar: [{
             text: '<i style="margin-right:3px;" class="icon icon-plus"></i> '+_('modtimetable.timetable.create')
             ,handler: this.createTimetable
             ,scope: this
         },{
+            xtype:'tbtext',
+            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">Timetables</h2>'
+        },'->',{
             xtype: 'textfield'
             ,emptyText: _('modtimetable.global.search') + '...'
             ,listeners: {
@@ -180,6 +183,7 @@ Ext.extend(modTimetable.grid.Timetables,MODx.grid.Grid,{
         var daysGrid = MODx.load({
             xtype: 'modtimetable-grid-days',
             timetableId: record.data['id'],
+            timetableRec:record,
             baseParams:{
                 action: 'mgr/day/getlist',
                 timetableId:record.data['id']

@@ -12,10 +12,11 @@ class modTimetableHomeManagerController extends modTimetableBaseManagerControlle
     }
     public function getPageTitle() { return $this->modx->lexicon('modtimetable'); }
     public function loadCustomCssJs() {
-    
-    
+
+        $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/extras/breadcrumbs.panel.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/extras/griddraganddrop.js');
 
+        $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/sessions.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/days.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/timetables.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/home.panel.js');

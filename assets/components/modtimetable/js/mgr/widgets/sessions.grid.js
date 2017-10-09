@@ -1,4 +1,4 @@
-modTimetable.grid.Days = function(config) {
+modTimetable.grid.Sessions = function(config) {
     config = config || {};
     this.actionColTpl = new Ext.XTemplate('<tpl for=".">'
         +'{control_buttons}'
@@ -13,62 +13,62 @@ modTimetable.grid.Days = function(config) {
         compiled: true
     });
     Ext.applyIf(config,{
-        id: 'modtimetable-grid-days'
+        id: 'modtimetable-grid-sessions'
         ,url: modTimetable.config.connectorUrl
         ,baseParams: {
-            action: 'mgr/day/getlist'
+            action: 'mgr/session/getlist'
         }
-        ,save_action: 'mgr/day/updatefromgrid'
+        ,save_action: 'mgr/session/updatefromgrid'
         ,autosave: true
         ,fields: ['id','name','description','num_in_week','image','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
-        ,ddGroup: 'modtimetableDayDDGroup'
+        ,ddGroup: 'modtimetableSessionDDGroup'
         ,enableDragDrop: true
         ,columns: [{
             header: _('id')
             ,dataIndex: 'id'
             ,width: 40
         },{
-            header: _('modtimetable.day.name')
+            header: _('modtimetable.session.name')
             ,dataIndex: 'name'
             ,width: 100
             ,editor: { xtype: 'textfield' }
         },{
-            header: _('modtimetable.day.action')
+            header: _('modtimetable.session.action')
             ,dataIndex:'control_buttons'
             ,width:250
             ,fixed:true
             ,renderer: { fn: this.actionColumnRenderer, scope: this }
         },{
-            header: _('modtimetable.day.description')
+            header: _('modtimetable.session.description')
             ,dataIndex: 'description'
             ,width: 250
             ,editor: { xtype: 'textfield' }
         },{
-            header: _('modtimetable.day.image')
+            header: _('modtimetable.session.image')
             ,dataIndex: 'image'
             ,width: 150
             ,fixed:true
             ,editor: { xtype: 'textfield' }
         },{
-            header: _('modtimetable.day.position')
+            header: _('modtimetable.session.position')
             ,dataIndex: 'position'
             ,width: 50
             ,editor: { xtype: 'numberfield', allowDecimal: false, allowNegative: false }
         }]
         ,tbar: [{
-            text: '<i style="margin-right:3px;" class="icon icon-arrow-left"></i> '+_('modtimetable.day.backtotimetables')
-            ,handler: this.backToTimetableGrid
+            text: '<i style="margin-right:3px;" class="icon icon-arrow-left"></i> '+_('modtimetable.session.backtodays')
+            ,handler: this.backToDayGrid
             ,scope: this
         },{
-            text: '<i style="margin-right:3px;" class="icon icon-plus"></i> '+_('modtimetable.day.create')
-            ,handler: this.createDay
+            text: '<i style="margin-right:3px;" class="icon icon-plus"></i> '+_('modtimetable.session.create')
+            ,handler: this.createSession
             ,scope: this
         },{
             xtype:'tbtext',
-            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">Days</h2>'
+            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">Sessions</h2>'
         },'->',{
             xtype: 'textfield'
             ,emptyText: _('modtimetable.global.search') + '...'
@@ -100,7 +100,7 @@ modTimetable.grid.Days = function(config) {
                             MODx.Ajax.request({
                                 url: modTimetable.config.connectorUrl
                                 ,params: {
-                                    action: 'mgr/day/reorder'
+                                    action: 'mgr/session/reorder'
                                     ,idItem: records.pop().id
                                     ,oldIndex: oldIndex
                                     ,newIndex: newIndex
@@ -127,28 +127,28 @@ modTimetable.grid.Days = function(config) {
 
         }
     });
-    modTimetable.grid.Days.superclass.constructor.call(this,config);
+    modTimetable.grid.Sessions.superclass.constructor.call(this,config);
     this.on('click', this.onClick, this);
 };
-Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
+Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
     windows: {}
 
     ,getMenu: function() {
         var m = [];
         m.push({
-            text: _('modtimetable.day.update')
-            ,handler: this.updateDay
+            text: _('modtimetable.session.update')
+            ,handler: this.updateSession
         });
         m.push('-');
         m.push({
-            text: _('modtimetable.day.remove')
-            ,handler: this.removeDay
+            text: _('modtimetable.session.remove')
+            ,handler: this.removeSession
         });
         this.addContextMenuItem(m);
     }
 
-    ,backToTimetableGrid: function() {
-        Ext.getCmp('modtimetable-grid-timetables').activate();
+    ,backToDayGrid: function() {
+        Ext.getCmp('modtimetable-grid-days').activate();
     }
 
 
@@ -156,8 +156,7 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         var rec = record.data;
         var values = { sessions: '' };
         var h = [];
-        h.push({ className:'editDay', text: '<i class="icon icon-edit"></i> '+_('modtimetable.day.edit') });
-        h.push({ className:'viewSessions', text: '<i class="icon icon-clock-o"></i> '+_('modtimetable.day.view_sessions') });
+        h.push({ className:'editSession', text: '<i class="icon icon-edit"></i> '+_('modtimetable.session.edit') });
 
         values.actions = h;
         return this.actionColTpl.apply(values);
@@ -171,11 +170,8 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
             var record = this.getSelectionModel().getSelected();
             this.menu.record = record.data;
             switch (act) {
-                case 'editDay':
-                    this.updateDay(record, e);
-                    break;
-                case 'viewSessions':
-                    this.loadSessionsCard(record, e);
+                case 'editSession':
+                    this.updateSession(record, e);
                     break;
                 default:
                     break;
@@ -183,35 +179,14 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         }
     }
 
-    ,loadSessionsCard: function(record, e) {
-        var cards = Ext.getCmp('timetable-card-container');
-        if(Ext.getCmp('modtimetable-grid-sessions')){
-            Ext.getCmp('modtimetable-grid-sessions').destroy();
-        }
-        var sessionsPanel = Ext.getCmp('modtimetable-panel-sessions');
-        var sessionsGrid = MODx.load({
-            xtype: 'modtimetable-grid-sessions',
-            dayId: record.data['id'],
-            baseParams:{
-                action: 'mgr/session/getlist',
-                dayId:record.data['id']
-            }
-        });
-        sessionsPanel.add(sessionsGrid);
-        cards.getLayout().setActiveItem(2);
-        this.updateBreadcrumbs( _('modtimetable.session.managesessions')+' '+record.data['name'],record);
-        this.fireEvent('sessionspanelloaded',record);
-    }
-
     // Makes this card the active one
     ,activate: function() {
         var cardLayout = Ext.getCmp('timetable-card-container').getLayout();
         var oldRecord = cardLayout.activeItem.record;
-        cardLayout.setActiveItem(1);
+        cardLayout.setActiveItem(this.id);
         this.refresh();
-
-        this.setCurrentBreadcrumb( _('modtimetable.day.managedays')+' '+ this.timetableRec.data['name'],this.timetableRec);
-        cardLayout.activeItem.fireEvent('daysactivated',oldRecord);
+        this.resetBreadcrumbs('Sessions');
+        cardLayout.activeItem.fireEvent('sessionsactivated',oldRecord);
     }
 
     // Adds a new breadcrumb to the trail
@@ -221,33 +196,12 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         bd.text = msg;
 
         bd.trail.shift();
-
         if (bd.trail.length > 0) {
             bd.trail[bd.trail.length - 1].install = true;
         }
         var newBcItem = {
-            text : 'Day: '+rec.data['name']
+            text : 'Session: '+rec.data['name']
             ,rec: rec
-        };
-        bd.trail.push(newBcItem);
-        bc.updateDetail(bd);
-    }
-
-    // Removes a breadcrumb and makes this one current
-    ,setCurrentBreadcrumb: function(msg, rec){
-        this.resetBreadcrumbs(msg);
-        var bc = Ext.getCmp('timetable-breadcrumbs');
-        var bd = bc.getData();
-        bd.text = msg;
-
-        bd.trail.shift();
-        if (bd.trail.length > 0) {
-            bd.trail[bd.trail.length - 1].install = true;
-        }
-        var newBcItem = {
-            text : 'Day: '+rec.data['name']
-            ,rec: rec
-
         };
         bd.trail.push(newBcItem);
         bc.updateDetail(bd);
@@ -258,49 +212,50 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         msg = Ext.getCmp('timetable-breadcrumbs').desc;
         if(highlight){
             msg.text = msg;
+            msg.className = 'highlight';
         }
         Ext.getCmp('timetable-breadcrumbs').reset(msg);
     }
 
-    ,createDay: function(btn,e) {
+    ,createSession: function(btn,e) {
 
-        var createDay = MODx.load({
-            xtype: 'modtimetable-window-day'
+        var createSession = MODx.load({
+            xtype: 'modtimetable-window-session'
             ,listeners: {
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
-        createDay.fp.getForm().findField('timetableId').setValue(this.timetableId);
-        createDay.show(e.target);
+        createSession.fp.getForm().findField('timetableId').setValue(this.timetableId);
+        createSession.show(e.target);
     }
 
-    ,updateDay: function(btn,e,isUpdate) {
+    ,updateSession: function(btn,e,isUpdate) {
         if (!this.menu.record || !this.menu.record.id) return false;
 
-        var updateDay = MODx.load({
-            xtype: 'modtimetable-window-day'
-            ,title: _('modtimetable.day.update')
-            ,action: 'mgr/day/update'
+        var updateSession = MODx.load({
+            xtype: 'modtimetable-window-session'
+            ,title: _('modtimetable.session.update')
+            ,action: 'mgr/session/update'
             ,record: this.menu.record
             ,listeners: {
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
 
-        updateDay.fp.getForm().reset();
-        updateDay.fp.getForm().setValues(this.menu.record);
-        updateDay.show(e.target);
+        updateSession.fp.getForm().reset();
+        updateSession.fp.getForm().setValues(this.menu.record);
+        updateSession.show(e.target);
     }
     
-    ,removeDay: function(btn,e) {
+    ,removeSession: function(btn,e) {
         if (!this.menu.record) return false;
         
         MODx.msg.confirm({
-            title: _('modtimetable.day.remove')
-            ,text: _('modtimetable.day.remove_confirm')
+            title: _('modtimetable.session.remove')
+            ,text: _('modtimetable.session.remove_confirm')
             ,url: this.config.url
             ,params: {
-                action: 'mgr/day/remove'
+                action: 'mgr/session/remove'
                 ,id: this.menu.record.id
             }
             ,listeners: {
@@ -320,15 +275,15 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         return this.selModel.selections.items[0].data.name;
     }
 });
-Ext.reg('modtimetable-grid-days',modTimetable.grid.Days);
+Ext.reg('modtimetable-grid-sessions',modTimetable.grid.Sessions);
 
-modTimetable.window.Day = function(config) {
+modTimetable.window.Session = function(config) {
     config = config || {};
     Ext.applyIf(config,{
-        title: _('modtimetable.day.create')
+        title: _('modtimetable.session.create')
         ,closeAction: 'close'
         ,url: modTimetable.config.connectorUrl
-        ,action: 'mgr/day/create'
+        ,action: 'mgr/session/create'
         ,fields: [{
             xtype: 'textfield'
             ,name: 'id'
@@ -353,8 +308,8 @@ modTimetable.window.Day = function(config) {
             ,hidden: true
         }]
     });
-    modTimetable.window.Day.superclass.constructor.call(this,config);
+    modTimetable.window.Session.superclass.constructor.call(this,config);
 };
-Ext.extend(modTimetable.window.Day,MODx.Window);
-Ext.reg('modtimetable-window-day',modTimetable.window.Day);
+Ext.extend(modTimetable.window.Session,MODx.Window);
+Ext.reg('modtimetable-window-session',modTimetable.window.Session);
 

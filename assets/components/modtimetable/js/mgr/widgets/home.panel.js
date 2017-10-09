@@ -11,7 +11,7 @@ modTimetable.panel.Home = function(config) {
         },{
             xtype: 'modx-panel'
             ,items: [{
-                xtype: 'modx-breadcrumbs-panel',
+                xtype: 'modtimetable-breadcrumbs-panel',
                 style:'box-shadow: 1px 1px 2px #bbb;',
                 id: 'timetable-breadcrumbs',
                 desc: '<p>'+_('modtimetable.timetable.intro_msg')+'</p>',
@@ -38,6 +38,9 @@ modTimetable.panel.Home = function(config) {
                 },{
                     xtype: 'modx-panel',
                     id: 'modtimetable-panel-days'
+                },{
+                    xtype: 'modx-panel',
+                    id: 'modtimetable-panel-sessions'
                 }]
             }]
         }]
