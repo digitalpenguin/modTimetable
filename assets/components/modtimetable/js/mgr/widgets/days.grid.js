@@ -20,7 +20,7 @@ modTimetable.grid.Days = function(config) {
         }
         ,save_action: 'mgr/day/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description', 'position']
+        ,fields: ['id','name','description','num_in_week','image','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -40,7 +40,7 @@ modTimetable.grid.Days = function(config) {
             ,dataIndex:'control_buttons'
             ,width:250
             ,fixed:true
-            ,renderer: { fn: this.daysColumnRenderer, scope: this }
+            ,renderer: { fn: this.actionColumnRenderer, scope: this }
         },{
             header: _('modtimetable.day.description')
             ,dataIndex: 'description'
@@ -53,10 +53,14 @@ modTimetable.grid.Days = function(config) {
             ,editor: { xtype: 'numberfield', allowDecimal: false, allowNegative: false }
         }]
         ,tbar: [{
-            text: _('modtimetable.day.create')
-            ,handler: this.createDay
+            text: '<i style="margin-right:3px;" class="icon icon-arrow-left"></i> '+_('modtimetable.day.backtotimetables')
+            ,handler: this.backToTimetableGrid
             ,scope: this
         },'->',{
+            text: '<i style="margin-right:3px;" class="icon icon-plus"></i> '+_('modtimetable.day.create')
+            ,handler: this.createDay
+            ,scope: this
+        },{
             xtype: 'textfield'
             ,emptyText: _('modtimetable.global.search') + '...'
             ,listeners: {
@@ -133,13 +137,18 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         });
         this.addContextMenuItem(m);
     }
-/*
-    ,daysColumnRenderer: function (value, metaData, record, rowIndex, colIndex, store){
+
+    ,backToTimetableGrid: function() {
+        Ext.getCmp('modtimetable-grid-timetables').activate();
+    }
+
+
+    ,actionColumnRenderer: function (value, metaData, record, rowIndex, colIndex, store){
         var rec = record.data;
-        var values = { days: '' };
+        var values = { sessions: '' };
         var h = [];
-        h.push({ className:'editDay', text: '<i class="icon icon-edit"></i> Edit Day' });
-        h.push({ className:'viewDays', text: '<i class="icon icon-calendar"></i> View Days' });
+        h.push({ className:'editDay', text: '<i class="icon icon-edit"></i> '+_('modtimetable.day.edit') });
+        h.push({ className:'viewSessions', text: '<i class="icon icon-clock-o"></i> '+_('modtimetable.day.view_sessions') });
 
         values.actions = h;
         return this.actionColTpl.apply(values);
@@ -165,7 +174,7 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
             }
         }
     }
-*/
+
     ,createDay: function(btn,e) {
 
         var createDay = MODx.load({

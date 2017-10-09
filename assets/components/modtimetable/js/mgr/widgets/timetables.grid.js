@@ -20,7 +20,7 @@ modTimetable.grid.Timetables = function(config) {
         }
         ,save_action: 'mgr/timetable/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description', 'position']
+        ,fields: ['id','name','description','image','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -40,11 +40,17 @@ modTimetable.grid.Timetables = function(config) {
             ,dataIndex:'control_buttons'
             ,width:250
             ,fixed:true
-            ,renderer: { fn: this.daysColumnRenderer, scope: this }
+            ,renderer: { fn: this.actionColumnRenderer, scope: this }
         },{
             header: _('modtimetable.timetable.description')
             ,dataIndex: 'description'
             ,width: 250
+            ,editor: { xtype: 'textfield' }
+        },{
+            header: _('modtimetable.timetable.image')
+            ,dataIndex: 'image'
+            ,width: 150
+            ,fixed:true
             ,editor: { xtype: 'textfield' }
         },{
             header: _('modtimetable.timetable.position')
@@ -134,12 +140,12 @@ Ext.extend(modTimetable.grid.Timetables,MODx.grid.Grid,{
         this.addContextMenuItem(m);
     }
 
-    ,daysColumnRenderer: function (value, metaData, record, rowIndex, colIndex, store){
+    ,actionColumnRenderer: function (value, metaData, record, rowIndex, colIndex, store){
         var rec = record.data;
         var values = { days: '' };
         var h = [];
-        h.push({ className:'editTimetable', text: '<i class="icon icon-edit"></i> Edit Timetable' });
-        h.push({ className:'viewDays', text: '<i class="icon icon-calendar"></i> View Days' });
+        h.push({ className:'editTimetable', text: '<i class="icon icon-edit"></i> '+_('modtimetable.timetable.edit') });
+        h.push({ className:'viewDays', text: '<i class="icon icon-calendar"></i> '+_('modtimetable.timetable.view_days') });
 
         values.actions = h;
         return this.actionColTpl.apply(values);
@@ -181,7 +187,7 @@ Ext.extend(modTimetable.grid.Timetables,MODx.grid.Grid,{
         });
         daysPanel.add(daysGrid);
         cards.getLayout().setActiveItem(1);
-        this.updateBreadcrumbs('Manage the days belonging to '+record.data['name'],record);
+        this.updateBreadcrumbs( _('modtimetable.day.managedays')+' '+record.data['name'],record);
         this.fireEvent('dayspanelloaded',record);
     }
 

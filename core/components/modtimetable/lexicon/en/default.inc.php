@@ -21,9 +21,12 @@ $_lang['modtimetable.timetable.name'] = 'Name';
 $_lang['modtimetable.timetable.description'] = 'Description';
 $_lang['modtimetable.timetable.days'] = 'Days';
 $_lang['modtimetable.timetable.action'] = 'Action';
+$_lang['modtimetable.timetable.image'] = 'Image';
 $_lang['modtimetable.timetable.position'] = 'Position';
-$_lang['modtimetable.timetable.create'] = 'Create new timetable';
+$_lang['modtimetable.timetable.create'] = 'Create New Timetable';
 $_lang['modtimetable.timetable.update'] = 'Update timetable';
+$_lang['modtimetable.timetable.edit'] = 'Edit Timetable';
+$_lang['modtimetable.timetable.view_days'] = 'View Days';
 $_lang['modtimetable.timetable.remove'] = 'Remove timetable';
 $_lang['modtimetable.timetable.remove_confirm'] = 'Are you sure you want to remove this timetable?';
 
@@ -36,15 +39,20 @@ $_lang['modtimetable.err.timetable_save'] = 'An error occurred while trying to s
 // Days
 $_lang['modtimetable.day.days'] = 'Days that belong to the timetable.';
 $_lang['modtimetable.day.intro_msg'] = 'Manage your Days.';
+$_lang['modtimetable.day.managedays'] = 'Manage the days belonging to';
 
 $_lang['modtimetable.day.name'] = 'Name';
 $_lang['modtimetable.day.description'] = 'Description';
 $_lang['modtimetable.day.days'] = 'Days';
 $_lang['modtimetable.day.action'] = 'Action';
+$_lang['modtimetable.day.image'] = 'Image';
 $_lang['modtimetable.day.position'] = 'Position';
-$_lang['modtimetable.day.create'] = 'Create day';
+$_lang['modtimetable.day.create'] = 'Create New Day';
 $_lang['modtimetable.day.update'] = 'Update day';
+$_lang['modtimetable.day.edit'] = 'Edit Day';
+$_lang['modtimetable.day.view_sessions'] = 'View Sessions';
 $_lang['modtimetable.day.remove'] = 'Remove day';
+$_lang['modtimetable.day.backtotimetables'] = 'Back to Timetables List';
 $_lang['modtimetable.day.remove_confirm'] = 'Are you sure you want to remove this day?';
 
 $_lang['modtimetable.err.day_name_ae'] = 'A day already exists with that name.';
