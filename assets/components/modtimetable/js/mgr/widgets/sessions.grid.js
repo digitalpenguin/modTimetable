@@ -1,5 +1,6 @@
 modTimetable.grid.Sessions = function(config) {
     config = config || {};
+    var me = this;
     this.actionColTpl = new Ext.XTemplate('<tpl for=".">'
         +'{control_buttons}'
             +'<tpl if="actions !== null">'
@@ -20,7 +21,7 @@ modTimetable.grid.Sessions = function(config) {
         }
         ,save_action: 'mgr/session/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description','num_in_week','image','position']
+        ,fields: ['id','name','description','start_time','end_time','image','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -38,9 +39,41 @@ modTimetable.grid.Sessions = function(config) {
         },{
             header: _('modtimetable.session.action')
             ,dataIndex:'control_buttons'
-            ,width:250
+            ,width:150
             ,fixed:true
             ,renderer: { fn: this.actionColumnRenderer, scope: this }
+        },{
+            header: _('modtimetable.session.start_time')
+            ,dataIndex: 'start_time'
+            ,width: 100
+            ,editor: { xtype: 'textfield',cls: 'datetimepicker' }
+            ,listeners:{
+                'dblclick':function() {
+                    jQuery('.datetimepicker').datetimepicker({
+                        datepicker: false,
+                        format: modTimetable.config.datetimepicker_time_format,
+                        formatTime: modTimetable.config.datetimepicker_time_format,
+                        step: modTimetable.config.datetimepicker_minute_interval,
+                        lang: modTimetable.config.datetimepicker_language
+                    });
+                }
+            }
+        },{
+            header: _('modtimetable.session.end_time')
+            ,dataIndex: 'end_time'
+            ,width: 100
+            ,editor: { xtype: 'textfield',cls: 'datetimepicker' }
+            ,listeners:{
+                'dblclick':function() {
+                    jQuery('.datetimepicker').datetimepicker({
+                        datepicker: false,
+                        format: modTimetable.config.datetimepicker_time_format,
+                        formatTime: modTimetable.config.datetimepicker_time_format,
+                        step: modTimetable.config.datetimepicker_minute_interval,
+                        lang: modTimetable.config.datetimepicker_language
+                    });
+                }
+            }
         },{
             header: _('modtimetable.session.description')
             ,dataIndex: 'description'
@@ -68,7 +101,7 @@ modTimetable.grid.Sessions = function(config) {
             ,scope: this
         },{
             xtype:'tbtext',
-            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">Sessions</h2>'
+            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">'+config.dayRecord.data['name']+' '+_('modtimetable.session.day_sessions')+'</h2>'
         },'->',{
             xtype: 'textfield'
             ,emptyText: _('modtimetable.global.search') + '...'
@@ -218,14 +251,23 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
     }
 
     ,createSession: function(btn,e) {
-
         var createSession = MODx.load({
             xtype: 'modtimetable-window-session'
             ,listeners: {
+                'show': function() {
+                    jQuery('.datetimepicker').datetimepicker({
+                        datepicker: false,
+                        format: modTimetable.config.datetimepicker_time_format,
+                        formatTime: modTimetable.config.datetimepicker_time_format,
+                        step: modTimetable.config.datetimepicker_minute_interval,
+                        lang: modTimetable.config.datetimepicker_language
+                    });
+                },
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
-        createSession.fp.getForm().findField('timetableId').setValue(this.timetableId);
+        alert(this.dayId);
+        createSession.fp.getForm().findField('dayId').setValue(this.dayId);
         createSession.show(e.target);
     }
 
@@ -238,6 +280,15 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
             ,action: 'mgr/session/update'
             ,record: this.menu.record
             ,listeners: {
+                'show': function() {
+                    jQuery('.datetimepicker').datetimepicker({
+                        datepicker: false,
+                        format: modTimetable.config.datetimepicker_time_format,
+                        formatTime: modTimetable.config.datetimepicker_time_format,
+                        step: modTimetable.config.datetimepicker_minute_interval,
+                        lang: modTimetable.config.datetimepicker_language
+                    });
+                },
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
@@ -290,12 +341,24 @@ modTimetable.window.Session = function(config) {
             ,hidden: true
         },{
             xtype: 'textfield'
-            ,name: 'timetableId'
+            ,name: 'dayId'
             ,hidden: true
         },{
             xtype: 'textfield'
             ,fieldLabel: _('name')
             ,name: 'name'
+            ,anchor: '100%'
+        },{
+            xtype: 'textfield'
+            ,fieldLabel: _('modtimetable.session.start_time')
+            ,cls:'datetimepicker'
+            ,name: 'start_time'
+            ,anchor: '100%'
+        },{
+            xtype: 'textfield'
+            ,fieldLabel: _('modtimetable.session.end_time')
+            ,cls:'datetimepicker'
+            ,name: 'end_time'
             ,anchor: '100%'
         },{
             xtype: 'textarea'

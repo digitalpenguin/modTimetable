@@ -216,7 +216,7 @@ Ext.extend(modTimetable.grid.Timetables,MODx.grid.Grid,{
             bd.trail[bd.trail.length - 1].install = true;
         }
         var newBcItem = {
-            text : 'Timetable: '+rec.data['name']
+            text : rec.data['name']
             ,rec: rec
         };
         bd.trail.push(newBcItem);

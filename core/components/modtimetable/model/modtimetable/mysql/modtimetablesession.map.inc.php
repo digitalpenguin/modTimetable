@@ -10,7 +10,6 @@ $xpdo_meta_map['modTimetableSession']= array (
   'fields' => 
   array (
     'day_id' => NULL,
-    'sessiontype_id' => NULL,
     'name' => '',
     'description' => '',
     'start_time' => NULL,
@@ -21,13 +20,6 @@ $xpdo_meta_map['modTimetableSession']= array (
   'fieldMeta' => 
   array (
     'day_id' => 
-    array (
-      'dbtype' => 'int',
-      'precision' => '10',
-      'phptype' => 'integer',
-      'null' => false,
-    ),
-    'sessiontype_id' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -51,14 +43,16 @@ $xpdo_meta_map['modTimetableSession']= array (
     ),
     'start_time' => 
     array (
-      'dbtype' => 'time',
-      'phptype' => 'datetime',
+      'dbtype' => 'varchar',
+      'precision' => '100',
+      'phptype' => 'string',
       'null' => true,
     ),
     'end_time' => 
     array (
-      'dbtype' => 'time',
-      'phptype' => 'datetime',
+      'dbtype' => 'varchar',
+      'precision' => '100',
+      'phptype' => 'string',
       'null' => true,
     ),
     'image' => 
@@ -77,14 +71,6 @@ $xpdo_meta_map['modTimetableSession']= array (
   ),
   'aggregates' => 
   array (
-    'modTimetableSessionType' => 
-    array (
-      'class' => 'modTimetableSessionType',
-      'local' => 'sessiontype_id',
-      'foreign' => 'id',
-      'cardinality' => 'one',
-      'owner' => 'foreign',
-    ),
     'modTimetableDay' => 
     array (
       'class' => 'modTimetableDay',

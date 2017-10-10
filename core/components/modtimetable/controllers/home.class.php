@@ -12,6 +12,7 @@ class modTimetableHomeManagerController extends modTimetableBaseManagerControlle
     }
     public function getPageTitle() { return $this->modx->lexicon('modtimetable'); }
     public function loadCustomCssJs() {
+        $this->addCss($this->modx->getOption('modtimetable.datetimepicker_css_source'));
 
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/extras/breadcrumbs.panel.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/extras/griddraganddrop.js');
@@ -20,9 +21,12 @@ class modTimetableHomeManagerController extends modTimetableBaseManagerControlle
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/days.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/timetables.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/home.panel.js');
-        $this->addLastJavascript($this->modtimetable->getOption('jsUrl').'mgr/sections/home.js');
-    
-    }
 
+        $this->addJavascript($this->modx->getOption('modtimetable.jquery_source'));
+        $this->addJavascript($this->modx->getOption('modtimetable.datetimepicker_js_source'));
+
+        $this->addLastJavascript($this->modtimetable->getOption('jsUrl').'mgr/sections/home.js');
+
+    }
     public function getTemplateFile() { return $this->modtimetable->getOption('templatesPath').'home.tpl'; }
 }

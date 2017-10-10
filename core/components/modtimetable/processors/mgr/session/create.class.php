@@ -12,7 +12,7 @@ class modTimetableSessionCreateProcessor extends modObjectCreateProcessor {
     public $dayId;
 
     public function initialize() {
-        if(!$this->getProperty('timetableId')) return 'Unable to find Day id#';
+        if(!$this->getProperty('dayId')) return 'Unable to find Day id#';
         $this->dayId = $this->getProperty('dayId');
         return parent::initialize();
     }

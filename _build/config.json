@@ -39,7 +39,37 @@
         
         },
 
-        "systemSettings": []
+        "systemSettings": [{
+            "key": "jquery_source",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+        },{
+            "key": "datetimepicker_js_source",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js"
+        },{
+            "key": "datetimepicker_css_source",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css"
+        },{
+            "key": "datetimepicker_minute_interval",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "30"
+        },{
+            "key": "datetimepicker_time_format",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "H:i"
+        },{
+            "key": "datetimepicker_language",
+            "type": "textfield",
+            "area": "datetimepicker",
+            "value": "en"
+        }]
     }
     
     ,"database": {

@@ -31,11 +31,16 @@ class modTimetable {
             'assetsUrl' => $assetsUrl,
             'jsUrl' => $assetsUrl . 'js/',
             'cssUrl' => $assetsUrl . 'css/',
-            'connectorUrl' => $assetsUrl . 'connector.php'
+            'connectorUrl' => $assetsUrl . 'connector.php',
+            'datetimepicker_default_time' => $this->getOption('datetimepicker_default_time'),
+            'datetimepicker_minute_interval' => $this->getOption('datetimepicker_minute_interval'),
+            'datetimepicker_time_format' => $this->getOption('datetimepicker_time_format')
         ), $options);
 
         $this->modx->addPackage('modtimetable', $this->getOption('modelPath'));
         $this->modx->lexicon->load('modtimetable:default');
+
+
     }
 
     /**

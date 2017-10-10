@@ -35,6 +35,7 @@ $_lang['modtimetable.err.timetable_save'] = 'An error occurred while trying to s
 // Days
 $_lang['modtimetable.day.intro_msg'] = 'Manage your Days.';
 $_lang['modtimetable.day.managedays'] = 'Manage the days belonging to';
+$_lang['modtimetable.day.timetable_days'] = 'Days';
 $_lang['modtimetable.day.name'] = 'Name';
 $_lang['modtimetable.day.description'] = 'Description';
 $_lang['modtimetable.day.days'] = 'Days';
@@ -57,9 +58,12 @@ $_lang['modtimetable.err.day_save'] = 'An error occurred while trying to save th
 // Sessions
 $_lang['modtimetable.session.intro_msg'] = 'Manage your Sessions.';
 $_lang['modtimetable.session.managesessions'] = 'Manage the sessions for ';
+$_lang['modtimetable.session.day_sessions'] = 'Sessions';
 $_lang['modtimetable.session.name'] = 'Name';
 $_lang['modtimetable.session.description'] = 'Description';
 $_lang['modtimetable.session.session'] = 'Sessions';
+$_lang['modtimetable.session.start_time'] = 'Start Time';
+$_lang['modtimetable.session.end_time'] = 'End Time';
 $_lang['modtimetable.session.action'] = 'Action';
 $_lang['modtimetable.session.image'] = 'Image';
 $_lang['modtimetable.session.position'] = 'Position';

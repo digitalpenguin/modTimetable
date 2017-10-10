@@ -68,7 +68,7 @@ modTimetable.grid.Days = function(config) {
             ,scope: this
         },{
             xtype:'tbtext',
-            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">Days</h2>'
+            text:'<h2 style="font-size:22px; margin-top:2px; color:#aaa;">'+config.timetableRec.data['name']+' '+_('modtimetable.day.timetable_days')+'</h2>'
         },'->',{
             xtype: 'textfield'
             ,emptyText: _('modtimetable.global.search') + '...'
@@ -192,6 +192,7 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
         var sessionsGrid = MODx.load({
             xtype: 'modtimetable-grid-sessions',
             dayId: record.data['id'],
+            dayRecord: record,
             baseParams:{
                 action: 'mgr/session/getlist',
                 dayId:record.data['id']
@@ -226,7 +227,7 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
             bd.trail[bd.trail.length - 1].install = true;
         }
         var newBcItem = {
-            text : 'Day: '+rec.data['name']
+            text : rec.data['name']
             ,rec: rec
         };
         bd.trail.push(newBcItem);
@@ -245,7 +246,7 @@ Ext.extend(modTimetable.grid.Days,MODx.grid.Grid,{
             bd.trail[bd.trail.length - 1].install = true;
         }
         var newBcItem = {
-            text : 'Day: '+rec.data['name']
+            text : rec.data['name']
             ,rec: rec
 
         };
