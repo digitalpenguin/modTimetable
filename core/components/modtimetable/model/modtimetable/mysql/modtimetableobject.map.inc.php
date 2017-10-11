@@ -2,18 +2,16 @@
 /**
  * @package modtimetable
  */
-$xpdo_meta_map['modTimetableSessionType']= array (
+$xpdo_meta_map['modTimetableObject']= array (
   'package' => 'modtimetable',
-  'version' => '0.1',
-  'table' => 'modtimetable_sessiontypes',
+  'version' => '1.1',
   'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'name' => '',
     'description' => '',
-    'start_time' => NULL,
-    'end_time' => NULL,
     'image' => NULL,
+    'active' => NULL,
     'position' => NULL,
   ),
   'fieldMeta' => 
@@ -33,22 +31,17 @@ $xpdo_meta_map['modTimetableSessionType']= array (
       'null' => false,
       'default' => '',
     ),
-    'start_time' => 
-    array (
-      'dbtype' => 'time',
-      'phptype' => 'datetime',
-      'null' => true,
-    ),
-    'end_time' => 
-    array (
-      'dbtype' => 'time',
-      'phptype' => 'datetime',
-      'null' => true,
-    ),
     'image' => 
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
+      'null' => true,
+    ),
+    'active' => 
+    array (
+      'dbtype' => 'tinyint',
+      'precision' => '1',
+      'phptype' => 'integer',
       'null' => true,
     ),
     'position' => 
@@ -61,11 +54,11 @@ $xpdo_meta_map['modTimetableSessionType']= array (
   ),
   'composites' => 
   array (
-    'modTimetableSession' => 
+    'ExtraFieldClosure' => 
     array (
-      'class' => 'modTimetableSession',
+      'class' => 'modTimetableExtraFieldClosure',
       'local' => 'id',
-      'foreign' => 'sessiontype_id',
+      'foreign' => 'object_id',
       'cardinality' => 'many',
       'owner' => 'local',
     ),

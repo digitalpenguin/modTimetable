@@ -46,13 +46,20 @@ modTimetable.grid.Timetables = function(config) {
             ,dataIndex: 'description'
             ,width: 250
             ,editor: { xtype: 'textfield' }
-        },{
+        }/*,{
             header: _('modtimetable.timetable.image')
             ,dataIndex: 'image'
             ,width: 150
             ,fixed:true
-            ,editor: { xtype: 'textfield' }
-        },{
+            ,sortable:false
+            ,renderer: function(value,metadata,record){
+                if(!value){return;}
+                if(value.charAt(0) !== '/') {
+                    value = '/'+value;
+                }
+                return '<img style="width:100%;" src="' + value + '" />';
+            }
+        }*/,{
             header: _('modtimetable.timetable.position')
             ,dataIndex: 'position'
             ,width: 50
@@ -295,6 +302,7 @@ Ext.reg('modtimetable-grid-timetables',modTimetable.grid.Timetables);
 
 modTimetable.window.Timetable = function(config) {
     config = config || {};
+    var me = this;
     Ext.applyIf(config,{
         title: _('modtimetable.timetable.create')
         ,closeAction: 'close'
@@ -322,6 +330,19 @@ modTimetable.window.Timetable = function(config) {
     });
     modTimetable.window.Timetable.superclass.constructor.call(this,config);
 };
-Ext.extend(modTimetable.window.Timetable,MODx.Window);
+Ext.extend(modTimetable.window.Timetable,MODx.Window, {
+    renderImage:function(colId,path) {
+        var rightCol = Ext.getCmp(colId);
+        if(path.charAt(0) !== '/') {
+            path = '/'+path;
+        }
+        rightCol.remove('school-image-preview-'+this.config.record.id);
+        rightCol.add({
+            html: '<img style="width:100%; margin-top:10px;" src="' + path + '" />'
+            ,id: 'school-image-preview-'+this.config.record.id
+        });
+        rightCol.doLayout();
+    }
+});
 Ext.reg('modtimetable-window-timetable',modTimetable.window.Timetable);
 

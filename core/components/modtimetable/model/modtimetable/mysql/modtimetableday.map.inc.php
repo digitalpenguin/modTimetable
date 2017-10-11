@@ -4,17 +4,12 @@
  */
 $xpdo_meta_map['modTimetableDay']= array (
   'package' => 'modtimetable',
-  'version' => '0.1',
+  'version' => '1.1',
   'table' => 'modtimetable_days',
-  'extends' => 'xPDOSimpleObject',
+  'extends' => 'modTimetableObject',
   'fields' => 
   array (
     'timetable_id' => NULL,
-    'num_in_week' => NULL,
-    'name' => '',
-    'description' => '',
-    'image' => NULL,
-    'position' => NULL,
   ),
   'fieldMeta' => 
   array (
@@ -25,45 +20,29 @@ $xpdo_meta_map['modTimetableDay']= array (
       'phptype' => 'integer',
       'null' => false,
     ),
-    'num_in_week' => 
+  ),
+  'indexes' => 
+  array (
+    'timetable_id' => 
     array (
-      'dbtype' => 'int',
-      'precision' => '10',
-      'phptype' => 'integer',
-      'null' => false,
-    ),
-    'name' => 
-    array (
-      'dbtype' => 'varchar',
-      'precision' => '100',
-      'phptype' => 'string',
-      'null' => false,
-      'default' => '',
-    ),
-    'description' => 
-    array (
-      'dbtype' => 'text',
-      'phptype' => 'text',
-      'null' => false,
-      'default' => '',
-    ),
-    'image' => 
-    array (
-      'dbtype' => 'text',
-      'phptype' => 'string',
-      'null' => true,
-    ),
-    'position' => 
-    array (
-      'dbtype' => 'int',
-      'precision' => '10',
-      'phptype' => 'integer',
-      'null' => true,
+      'alias' => 'timetable_id',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'timetable_id' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
     ),
   ),
   'composites' => 
   array (
-    'modTimetableSession' => 
+    'TimetableSession' => 
     array (
       'class' => 'modTimetableSession',
       'local' => 'id',
@@ -74,7 +53,7 @@ $xpdo_meta_map['modTimetableDay']= array (
   ),
   'aggregates' => 
   array (
-    'modTimetableTimetable' => 
+    'TimetableTimetable' => 
     array (
       'class' => 'modTimetableTimetable',
       'local' => 'timetable_id',

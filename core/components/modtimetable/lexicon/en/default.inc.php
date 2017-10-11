@@ -62,6 +62,7 @@ $_lang['modtimetable.session.day_sessions'] = 'Sessions';
 $_lang['modtimetable.session.name'] = 'Name';
 $_lang['modtimetable.session.description'] = 'Description';
 $_lang['modtimetable.session.session'] = 'Sessions';
+$_lang['modtimetable.session.teacher'] = 'Teacher';
 $_lang['modtimetable.session.start_time'] = 'Start Time';
 $_lang['modtimetable.session.end_time'] = 'End Time';
 $_lang['modtimetable.session.action'] = 'Action';

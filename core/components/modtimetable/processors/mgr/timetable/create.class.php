@@ -12,9 +12,7 @@ class modTimetableTimetableCreateProcessor extends modObjectCreateProcessor {
 
     public function beforeSet(){
         $timetables = $this->modx->getCollection($this->classKey);
-
         $this->setProperty('position', count($timetables));
-
         return parent::beforeSet();
     }
 

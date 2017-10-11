@@ -19,7 +19,6 @@ class modTimetable {
         $assetsPath = $this->getOption('assets_path', $options, $this->modx->getOption('assets_path', null, MODX_ASSETS_PATH) . 'components/modtimetable/');
         $assetsUrl = $this->getOption('assets_url', $options, $this->modx->getOption('assets_url', null, MODX_ASSETS_URL) . 'components/modtimetable/');
 
-        /* loads some default paths for easier management */
         $this->options = array_merge(array(
             'namespace' => $this->namespace,
             'corePath' => $corePath,
@@ -38,9 +37,8 @@ class modTimetable {
         ), $options);
 
         $this->modx->addPackage('modtimetable', $this->getOption('modelPath'));
+        $this->modx->loadClass('modtimetable.modTimetableObject', $this->getOption('modelPath'));
         $this->modx->lexicon->load('modtimetable:default');
-
-
     }
 
     /**

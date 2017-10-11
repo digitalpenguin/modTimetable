@@ -16,9 +16,9 @@ class modTimetableTimetableGetListProcessor extends modObjectGetListProcessor {
         $query = $this->getProperty('query');
         if (!empty($query)) {
             $c->where(array(
-                    'name:LIKE' => '%'.$query.'%',
-                    'OR:description:LIKE' => '%'.$query.'%',
-                ));
+                'name:LIKE' => '%'.$query.'%',
+                'OR:description:LIKE' => '%'.$query.'%',
+            ));
         }
         return $c;
     }

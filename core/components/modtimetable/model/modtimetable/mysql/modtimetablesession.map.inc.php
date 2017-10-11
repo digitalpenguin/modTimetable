@@ -4,18 +4,15 @@
  */
 $xpdo_meta_map['modTimetableSession']= array (
   'package' => 'modtimetable',
-  'version' => '0.1',
+  'version' => '1.1',
   'table' => 'modtimetable_sessions',
-  'extends' => 'xPDOSimpleObject',
+  'extends' => 'modTimetableObject',
   'fields' => 
   array (
     'day_id' => NULL,
-    'name' => '',
-    'description' => '',
+    'teacher' => NULL,
     'start_time' => NULL,
     'end_time' => NULL,
-    'image' => NULL,
-    'position' => NULL,
   ),
   'fieldMeta' => 
   array (
@@ -26,20 +23,12 @@ $xpdo_meta_map['modTimetableSession']= array (
       'phptype' => 'integer',
       'null' => false,
     ),
-    'name' => 
+    'teacher' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '100',
       'phptype' => 'string',
-      'null' => false,
-      'default' => '',
-    ),
-    'description' => 
-    array (
-      'dbtype' => 'text',
-      'phptype' => 'text',
-      'null' => false,
-      'default' => '',
+      'null' => true,
     ),
     'start_time' => 
     array (
@@ -55,23 +44,29 @@ $xpdo_meta_map['modTimetableSession']= array (
       'phptype' => 'string',
       'null' => true,
     ),
-    'image' => 
+  ),
+  'indexes' => 
+  array (
+    'day_id' => 
     array (
-      'dbtype' => 'text',
-      'phptype' => 'string',
-      'null' => true,
-    ),
-    'position' => 
-    array (
-      'dbtype' => 'int',
-      'precision' => '10',
-      'phptype' => 'integer',
-      'null' => true,
+      'alias' => 'day_id',
+      'primary' => false,
+      'unique' => false,
+      'type' => 'BTREE',
+      'columns' => 
+      array (
+        'day_id' => 
+        array (
+          'length' => '',
+          'collation' => 'A',
+          'null' => false,
+        ),
+      ),
     ),
   ),
   'aggregates' => 
   array (
-    'modTimetableDay' => 
+    'TimetableDay' => 
     array (
       'class' => 'modTimetableDay',
       'local' => 'day_id',

@@ -39,7 +39,7 @@ modTimetable.grid.Sessions = function(config) {
         },{
             header: _('modtimetable.session.action')
             ,dataIndex:'control_buttons'
-            ,width:150
+            ,width:300
             ,fixed:true
             ,renderer: { fn: this.actionColumnRenderer, scope: this }
         },{
@@ -79,13 +79,20 @@ modTimetable.grid.Sessions = function(config) {
             ,dataIndex: 'description'
             ,width: 250
             ,editor: { xtype: 'textfield' }
-        },{
+        }/*,{
             header: _('modtimetable.session.image')
             ,dataIndex: 'image'
             ,width: 150
             ,fixed:true
-            ,editor: { xtype: 'textfield' }
-        },{
+            ,sortable:false
+            ,renderer: function(value,metadata,record){
+                if(!value){return;}
+                if(value.charAt(0) !== '/') {
+                    value = '/'+value;
+                }
+                return '<img style="width:100%;" src="' + value + '" />';
+            }
+        }*/,{
             header: _('modtimetable.session.position')
             ,dataIndex: 'position'
             ,width: 50
@@ -266,7 +273,6 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
-        alert(this.dayId);
         createSession.fp.getForm().findField('dayId').setValue(this.dayId);
         createSession.show(e.target);
     }
@@ -330,49 +336,105 @@ Ext.reg('modtimetable-grid-sessions',modTimetable.grid.Sessions);
 
 modTimetable.window.Session = function(config) {
     config = config || {};
+    var me = this;
     Ext.applyIf(config,{
         title: _('modtimetable.session.create')
         ,closeAction: 'close'
+        ,width:700
         ,url: modTimetable.config.connectorUrl
         ,action: 'mgr/session/create'
         ,fields: [{
-            xtype: 'textfield'
-            ,name: 'id'
-            ,hidden: true
-        },{
-            xtype: 'textfield'
-            ,name: 'dayId'
-            ,hidden: true
-        },{
-            xtype: 'textfield'
-            ,fieldLabel: _('name')
-            ,name: 'name'
-            ,anchor: '100%'
-        },{
-            xtype: 'textfield'
-            ,fieldLabel: _('modtimetable.session.start_time')
-            ,cls:'datetimepicker'
-            ,name: 'start_time'
-            ,anchor: '100%'
-        },{
-            xtype: 'textfield'
-            ,fieldLabel: _('modtimetable.session.end_time')
-            ,cls:'datetimepicker'
-            ,name: 'end_time'
-            ,anchor: '100%'
-        },{
-            xtype: 'textarea'
-            ,fieldLabel: _('description')
-            ,name: 'description'
-            ,anchor: '100%'
-        },{
-            xtype: 'textfield'
-            ,name: 'position'
-            ,hidden: true
+            layout: 'column'
+            ,items: [{
+                layout: 'form'
+                ,columnWidth: .5
+                ,items: [{
+                    xtype: 'textfield'
+                    ,name: 'id'
+                    ,hidden: true
+                },{
+                    xtype: 'textfield'
+                    ,name: 'dayId'
+                    ,hidden: true
+                },{
+                    xtype: 'textfield'
+                    ,fieldLabel: _('name')
+                    ,name: 'name'
+                    ,anchor: '100%'
+                },{
+                    layout:'column'
+                    ,items:[{
+                        layout: 'form'
+                        ,columnWidth: .5
+                        ,items: [{
+                            xtype: 'textfield'
+                            ,fieldLabel: _('modtimetable.session.start_time')
+                            ,cls:'datetimepicker'
+                            ,name: 'start_time'
+                            ,anchor: '100%'
+                        }]
+                    },{
+                        layout: 'form'
+                        ,columnWidth: .5
+                        ,items: [{
+                            xtype: 'textfield'
+                            ,fieldLabel: _('modtimetable.session.end_time')
+                            ,cls:'datetimepicker'
+                            ,name: 'end_time'
+                            ,anchor: '100%'
+                        }]
+                    }]
+                },{
+                    xtype: 'textarea'
+                    ,fieldLabel: _('description')
+                    ,name: 'description'
+                    ,anchor: '100%'
+                },{
+                    xtype: 'textfield'
+                    ,name: 'position'
+                    ,hidden: true
+                }]
+            },{
+                layout:'form'
+                ,columnWidth:.5
+                ,items:[{
+                    xtype: 'modx-combo-browser'
+                    ,fieldLabel: 'Upload Image'
+                    ,name: 'image'
+                    ,id: 'location-image-field-'+Ext.id()
+                    ,fixed:false
+                    ,anchor:'100%'
+                    ,rootId: '/'
+                    ,openTo: '/'
+                    ,listeners:{
+                        'afterrender': function() {
+                            if(config.record.id) {
+                                me.renderImage(this.ownerCt.getId(), this.getValue());
+                            }
+                        }
+                        ,'select':function() {
+                            me.renderImage(this.ownerCt.getId(), this.getValue());
+                        }
+                    }
+                }]
+            }]
         }]
     });
     modTimetable.window.Session.superclass.constructor.call(this,config);
 };
-Ext.extend(modTimetable.window.Session,MODx.Window);
+Ext.extend(modTimetable.window.Session,MODx.Window,{
+    renderImage:function(colId,path) {
+        var rightCol = Ext.getCmp(colId);
+        if(path.charAt(0) !== '/') {
+            path = '/'+path;
+        }
+        rightCol.remove('school-image-preview-'+this.config.record.id);
+        rightCol.add({
+            html: '<img style="width:100%; margin-top:10px;" src="' + path + '" />'
+            ,id: 'school-image-preview-'+this.config.record.id
+        });
+        rightCol.doLayout();
+    }
+});
 Ext.reg('modtimetable-window-session',modTimetable.window.Session);
 

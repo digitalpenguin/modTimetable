@@ -2,5 +2,5 @@
 /**
  * @package modtimetable
  */
-class modTimetableSession extends xPDOSimpleObject {}
+class modTimetableSession extends modTimetableObject {}
 ?>

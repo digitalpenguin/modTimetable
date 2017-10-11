@@ -2,3 +2,8 @@
     content: "* ";
     color: red;
 }
+
+ul.actions {
+    bottom:inherit;
+    top:6px;
+}
