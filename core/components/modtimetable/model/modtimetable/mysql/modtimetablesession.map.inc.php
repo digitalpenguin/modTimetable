@@ -10,9 +10,9 @@ $xpdo_meta_map['modTimetableSession']= array (
   'fields' => 
   array (
     'day_id' => NULL,
-    'teacher' => NULL,
     'start_time' => NULL,
     'end_time' => NULL,
+    'teacher' => NULL,
   ),
   'fieldMeta' => 
   array (
@@ -23,13 +23,6 @@ $xpdo_meta_map['modTimetableSession']= array (
       'phptype' => 'integer',
       'null' => false,
     ),
-    'teacher' => 
-    array (
-      'dbtype' => 'varchar',
-      'precision' => '100',
-      'phptype' => 'string',
-      'null' => true,
-    ),
     'start_time' => 
     array (
       'dbtype' => 'varchar',
@@ -38,6 +31,13 @@ $xpdo_meta_map['modTimetableSession']= array (
       'null' => true,
     ),
     'end_time' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '100',
+      'phptype' => 'string',
+      'null' => true,
+    ),
+    'teacher' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '100',

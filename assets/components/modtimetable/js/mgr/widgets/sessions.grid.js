@@ -21,7 +21,7 @@ modTimetable.grid.Sessions = function(config) {
         }
         ,save_action: 'mgr/session/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description','start_time','end_time','image','position']
+        ,fields: ['id','name','teacher','description','start_time','end_time','image','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -74,6 +74,11 @@ modTimetable.grid.Sessions = function(config) {
                     });
                 }
             }
+        },{
+            header: _('modtimetable.session.teacher')
+            ,dataIndex: 'teacher'
+            ,width: 100
+            ,editor: { xtype: 'textfield' }
         },{
             header: _('modtimetable.session.description')
             ,dataIndex: 'description'
@@ -362,6 +367,11 @@ modTimetable.window.Session = function(config) {
                     ,name: 'name'
                     ,anchor: '100%'
                 },{
+                    xtype: 'textfield'
+                    ,fieldLabel: _('modtimetable.session.teacher')
+                    ,name: 'teacher'
+                    ,anchor: '100%'
+                },{
                     layout:'column'
                     ,items:[{
                         layout: 'form'
@@ -408,7 +418,7 @@ modTimetable.window.Session = function(config) {
                     ,openTo: '/'
                     ,listeners:{
                         'afterrender': function() {
-                            if(config.record.id) {
+                            if(config.record.id && this.getValue()) {
                                 me.renderImage(this.ownerCt.getId(), this.getValue());
                             }
                         }

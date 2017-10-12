@@ -306,26 +306,56 @@ modTimetable.window.Timetable = function(config) {
     Ext.applyIf(config,{
         title: _('modtimetable.timetable.create')
         ,closeAction: 'close'
+        ,width:650
         ,url: modTimetable.config.connectorUrl
         ,action: 'mgr/timetable/create'
         ,fields: [{
-            xtype: 'textfield'
-            ,name: 'id'
-            ,hidden: true
-        },{
-            xtype: 'textfield'
-            ,fieldLabel: _('name')
-            ,name: 'name'
-            ,anchor: '100%'
-        },{
-            xtype: 'textarea'
-            ,fieldLabel: _('description')
-            ,name: 'description'
-            ,anchor: '100%'
-        },{
-            xtype: 'textfield'
-            ,name: 'position'
-            ,hidden: true
+            layout: 'column'
+            , items: [{
+                layout: 'form'
+                , columnWidth: .5
+                , items: [{
+                    xtype: 'textfield'
+                    ,name: 'id'
+                    ,hidden: true
+                },{
+                    xtype: 'textfield'
+                    ,fieldLabel: _('name')
+                    ,name: 'name'
+                    ,anchor: '100%'
+                },{
+                    xtype: 'textarea'
+                    ,fieldLabel: _('description')
+                    ,name: 'description'
+                    ,anchor: '100%'
+                },{
+                    xtype: 'textfield'
+                    ,name: 'position'
+                    ,hidden: true
+                }]
+            },{
+                layout: 'form'
+                ,columnWidth: .5
+                ,items:[{
+                    xtype: 'modx-combo-browser'
+                    ,fieldLabel: 'Upload Image'
+                    ,name: 'image'
+                    ,id: 'location-image-field-'+Ext.id()
+                    ,fixed:false
+                    ,anchor:'100%'
+                    ,listeners:{
+                        'afterrender': function() {
+                            if(config.record.id && this.getValue()) {
+                                me.renderImage(this.ownerCt.getId(), this.getValue());
+                            }
+                        }
+                        ,'select':function() {
+                            me.renderImage(this.ownerCt.getId(), this.getValue());
+                        }
+                    }
+                }]
+
+            }]
         }]
     });
     modTimetable.window.Timetable.superclass.constructor.call(this,config);

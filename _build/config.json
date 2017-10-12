@@ -11,6 +11,24 @@
             ,"action": "home"
         }],
 
+        "elements": {
+          "snippets":[{
+            "name": "modtimetable"
+            ,"file": "modtimetable.snippet.php"
+
+          }]
+          ,"chunks":[{
+            "name": "timetableTpl"
+            ,"file": "timetable.chunk.tpl"
+          },{
+            "name": "dayTpl"
+            ,"file": "day.chunk.tpl"
+          },{
+            "name": "sessionTpl"
+            ,"file": "session.chunk.tpl"
+          }]
+        },
+
         "systemSettings": [{
             "key": "jquery_source",
             "type": "textfield",

@@ -23,6 +23,7 @@
         <field key="day_id" dbtype="int" precision="10" phptype="integer" null="false"/>
         <field key="start_time" dbtype="varchar" precision="100" phptype="string" null="true" />
         <field key="end_time" dbtype="varchar" precision="100" phptype="string" null="true" />
+        <field key="teacher" dbtype="varchar" precision="100" phptype="string" null="true" />
         <index alias="day_id" name="day_id" primary="false" unique="false" type="BTREE">
             <column key="day_id" length="" collation="A" null="false" />
         </index>
