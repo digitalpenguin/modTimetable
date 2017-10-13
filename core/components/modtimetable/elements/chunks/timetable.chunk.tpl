@@ -1,1 +1,1 @@
-<li><strong>[[+name]]</strong> - [[+description]]</li>
+<li><strong>[[+name]]</strong> - [[+description]][[+days]]</li>
