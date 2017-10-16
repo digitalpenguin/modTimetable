@@ -21,8 +21,6 @@ class modTimetableTimetableCreateProcessor extends modObjectCreateProcessor {
 
         if (empty($name)) {
             $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.timetable_name_ns'));
-        } else if ($this->doesAlreadyExist(array('name' => $name))) {
-            $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.timetable_name_ae'));
         }
         return parent::beforeSave();
     }

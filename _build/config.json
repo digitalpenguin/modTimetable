@@ -16,6 +16,10 @@
             "name": "modtimetable"
             ,"file": "modtimetable.snippet.php"
 
+          },{
+            "name": "testSnippet"
+          ,"file": "test.snippet.php"
+
           }]
           ,"chunks":[{
             "name": "timetableTpl"

@@ -10,6 +10,13 @@ class modTimetable {
     public $namespace = 'modtimetable';
     public $cache = null;
     public $options = array();
+    public $timetableIds = array();
+    public $singleDay = 0;
+    public $timetableTpl = '';
+    public $dayTpl = '';
+    public $sessionTpl = '';
+    public $sortby = 'position';
+    public $sortdir = 'ASC';
 
     public function __construct(modX &$modx, array $options = array()) {
         $this->modx =& $modx;
@@ -63,4 +70,87 @@ class modTimetable {
         }
         return $option;
     }
+
+    public function getTimetables($timetables,$day,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder) {
+        if(!empty($timetables)) {
+            $this->timetableIds = explode(",",$timetables);
+        }
+        $this->timetableTpl = $timetableTpl;
+        $this->dayTpl = $timetableTpl;
+        $this->sessionTpl = $timetableTpl;
+        if(!empty($day)) {
+            $this->singleDay=true;
+            return $this->getDayOfSessionsFromManyTimetables($day);
+        }
+
+        $c = $this->modx->newQuery('modTimetableTimetable');
+        $c->sortby($sortBy,$sortDir);
+        $c->where(array('id:IN'=>$this->timetableIds));
+        $timetables = $this->modx->getCollection('modTimetableTimetable',$c);
+
+        $timetableList = array();
+        foreach ($timetables as $timetable) {
+            $timetableArray = $timetable->toArray();
+            // Grab the days within each timetable
+            $c = $this->modx->newQuery('modTimetableDay');
+            $c->sortby($sortBy,$sortDir);
+            $c->where(array('timetable_id'=>$timetableArray['id']));
+            $days = $this->modx->getCollection('modTimetableDay',$c);
+            $dayArray = array();
+            $dayList = array();
+            foreach($days as $day) {
+                $dayArray = $day->toArray();
+
+                // Grab the sessions within each day
+                $c = $this->modx->newQuery('modTimetableSession');
+                $c->sortby($sortBy,$sortDir);
+                $c->where(array('day_id'=>$dayArray['id']));
+                $sessions = $this->modx->getCollection('modTimetableSession',$c);
+                $sessionArray = array();
+                $sessionList = array();
+                foreach($sessions as $session) {
+                    $sessionArray = $session->toArray();
+                    $sessionList[] = $this->modx->getChunk($sessionTpl,$sessionArray);
+                }
+                // Grab the day_id from the last iteration of the $sessionArray as they'll all be the same.
+                // We can then compare it with the current id of the day so we only get these sessions on the correct day.
+                if($dayArray['id'] === $sessionArray['day_id']) {
+                    $this->modx->setPlaceholder('sessions',implode($sessionList));
+                } else {
+                    $this->modx->setPlaceholder('sessions','');
+                }
+                $dayList[] = $this->modx->getChunk($dayTpl,$dayArray);
+            }
+            // Grab the timetable_id from the last iteration of the $dayArray as they'll all be the same.
+            // We can then compare it with the current id of the timetable so we only get these days on the correct timetable.
+            if($timetableArray['id'] === $dayArray['timetable_id']) {
+                $this->modx->setPlaceholder('days',implode($dayList));
+            } else {
+                $this->modx->setPlaceholder('days','');
+            }
+            $timetableList[] = $this->modx->getChunk($timetableTpl,$timetableArray);
+        }
+
+        $output = implode($outputSeparator,$timetableList);
+        if (!empty($toPlaceholder)) {
+            $this->modx->setPlaceholder($toPlaceholder,$output);
+            return '';
+        }
+        return $output;
+    }
+
+    public function getDayOfSessionsFromManyTimetables($day = '') {
+        if(!$day) {
+            $day = $this->getCurrentDay();
+        }
+        $output = $day;
+        return $output;
+    }
+
+    public function getCurrentDay() {
+        $day = date('l');
+        return $day;
+    }
+
+
 }

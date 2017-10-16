@@ -29,11 +29,8 @@ class modTimetableDayCreateProcessor extends modObjectCreateProcessor {
 
     public function beforeSave() {
         $name = $this->getProperty('name');
-
         if (empty($name)) {
             $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.day_name_ns'));
-        } else if ($this->doesAlreadyExist(array('name' => $name))) {
-            $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.day_name_ae'));
         }
         return parent::beforeSave();
     }

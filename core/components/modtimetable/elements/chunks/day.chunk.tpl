@@ -1,1 +1,2 @@
-<h1>[[+name]]</h1>[[+sessions]]
+<h1>[[+name]]</h1>
+[[+sessions]]
