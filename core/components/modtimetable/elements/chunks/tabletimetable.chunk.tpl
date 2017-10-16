@@ -3,8 +3,9 @@
     <h5>[[+description]]</h5>
     <table>
         <tr>
-            [[+dayHeaders]]
+            [[+headerRow]]
         </tr>
-        [[+days]]
+
+        [[+sessionRows]]
     </table>
 </div>

@@ -17,6 +17,8 @@ class modTimetable {
     public $sessionTpl = '';
     public $sortby = 'position';
     public $sortdir = 'ASC';
+    public $tableHeaderRow = array();
+    public $tableRow = array();
 
     public function __construct(modX &$modx, array $options = array()) {
         $this->modx =& $modx;
@@ -71,17 +73,20 @@ class modTimetable {
         return $option;
     }
 
-    public function getTimetables($timetables,$day,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder) {
+    public function getTimetables($timetables,$day,$renderTable,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder) {
         if(!empty($timetables)) {
             $this->timetableIds = explode(",",$timetables);
         }
         $this->timetableTpl = $timetableTpl;
         $this->dayTpl = $timetableTpl;
         $this->sessionTpl = $timetableTpl;
-        if(!empty($day)) {
+
+        // Render sessions for single day
+        if($day != null) {
             $this->singleDay=true;
             return $this->getDayOfSessionsFromManyTimetables($day);
         }
+
 
         $c = $this->modx->newQuery('modTimetableTimetable');
         $c->sortby($sortBy,$sortDir);
@@ -90,6 +95,13 @@ class modTimetable {
 
         $timetableList = array();
         foreach ($timetables as $timetable) {
+
+            // If selected render timetable output in rows for displaying as HTML table
+            if ($renderTable) {
+                return $this->renderRows($timetable);
+
+            }
+
             $timetableArray = $timetable->toArray();
             // Grab the days within each timetable
             $c = $this->modx->newQuery('modTimetableDay');
@@ -139,6 +151,57 @@ class modTimetable {
         return $output;
     }
 
+    public function renderRows($timetable) {
+        $output = $this->modx->getChunk('tableTimetableTpl',$timetable->toArray());
+        $c = $this->modx->newQuery('modTimetableDay');
+        $c->sortby($this->sortby,$this->sortdir);
+        $c->where(array('timetable_id'=>$timetable->get('id')));
+        $days = $this->modx->getCollection('modTimetableDay',$c);
+
+        $headerRow = '';
+        $sessionRows = array();
+        $dayIdx = 0;
+        foreach($days as $day) {
+            $headerRow .= $this->modx->getChunk('tableHeaderRowTpl',$day->toArray());
+
+            $c = $this->modx->newQuery('modTimetableSession');
+            $c->sortby($this->sortby,$this->sortdir);
+            $c->where(array('day_id'=>$day->get('id')));
+            $sessions = $this->modx->getCollection('modTimetableSession',$c);
+
+            $sessionIdx = 0;
+            // Make sure column is created even if no sessions.
+            if(empty($sessions)) {
+                $sessionRows[$dayIdx][$sessionIdx] = '<td></td>';
+            }
+            foreach($sessions as $session) {
+                $sessionRows[$dayIdx][$sessionIdx] = $this->modx->getChunk('tableSessionTpl',$session->toArray());
+                $sessionIdx++;
+            }
+            $dayIdx++;
+        }
+
+        $maxLength = $this->maxLength($sessionRows); // get the longest count of sessions in a day
+
+        $rows='';
+        for($sessionIdx=0;$sessionIdx<$maxLength;$sessionIdx++) {
+            $rows .= '<tr>';
+
+            for($i=0;$i<count($sessionRows);$i++) {
+                if(empty($sessionRows[$i][$sessionIdx])) {
+                    $rows .= '<td></td>';
+                } else {
+                    $rows .= $sessionRows[$i][$sessionIdx];
+                }
+            }
+            $rows .= '</tr>';
+        }
+        $this->modx->setPlaceholder('headerRow',$headerRow);
+        $this->modx->setPlaceholder('sessionRows',$rows);
+
+        return $output;
+    }
+
     public function getDayOfSessionsFromManyTimetables($day = '') {
         if(!$day) {
             $day = $this->getCurrentDay();
@@ -152,5 +215,14 @@ class modTimetable {
         return $day;
     }
 
+    public function maxLength($mdArray) {
+        $max = 0;
+        foreach($mdArray as $child) {
+            if(count($child) > $max) {
+                $max = count($child);
+            }
+        }
+        return $max;
+    }
 
 }

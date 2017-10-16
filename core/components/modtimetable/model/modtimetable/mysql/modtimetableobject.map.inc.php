@@ -11,7 +11,7 @@ $xpdo_meta_map['modTimetableObject']= array (
     'name' => '',
     'description' => '',
     'image' => NULL,
-    'active' => NULL,
+    'active' => 1,
     'position' => NULL,
   ),
   'fieldMeta' => 
@@ -42,7 +42,8 @@ $xpdo_meta_map['modTimetableObject']= array (
       'dbtype' => 'tinyint',
       'precision' => '1',
       'phptype' => 'integer',
-      'null' => true,
+      'null' => false,
+      'default' => 1,
     ),
     'position' => 
     array (

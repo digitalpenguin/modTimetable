@@ -1,2 +1,2 @@
-<h1>[[+name]]</h1>
+<td>[[+name]]</td>
 [[+sessions]]

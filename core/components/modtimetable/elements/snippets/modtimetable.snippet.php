@@ -8,13 +8,14 @@ $modtimetable = $modx->getService('modtimetable','modTimetable',$modx->getOption
 if (!($modtimetable instanceof modTimetable)) return '';
 
 $timetables = $modx->getOption('timetables',$scriptProperties,1);
-$singleDay = $modx->getOption('singleDay',$scriptProperties,0);
-$timetableTpl = $modx->getOption('timetableTpl',$scriptProperties,'timetableTpl');
-$dayTpl = $modx->getOption('dayTpl',$scriptProperties,'dayTpl');
-$sessionTpl = $modx->getOption('sessionTpl',$scriptProperties,'sessionTpl');
+$day = $modx->getOption('day',$scriptProperties,null);
+$renderTable = $modx->getOption('renderTable',$scriptProperties,0);
+$timetableTpl = $modx->getOption('timetableTpl',$scriptProperties,null);
+$dayTpl = $modx->getOption('dayTpl',$scriptProperties,null);
+$sessionTpl = $modx->getOption('sessionTpl',$scriptProperties,null);
 $sortBy = $modx->getOption('sortBy',$scriptProperties,'position');
 $sortDir = $modx->getOption('sortDir',$scriptProperties,'ASC');
 $outputSeparator = $modx->getOption('outputSeparator',$scriptProperties,"\n");
 $toPlaceholder = $modx->getOption('toPlaceholder',$scriptProperties,false);
 
-return $modtimetable->getTimetables($timetables,$singleDay,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder);
+return $modtimetable->getTimetables($timetables,$day,$renderTable,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder);

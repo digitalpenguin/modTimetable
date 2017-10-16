@@ -16,10 +16,6 @@
             "name": "modtimetable"
             ,"file": "modtimetable.snippet.php"
 
-          },{
-            "name": "testSnippet"
-          ,"file": "test.snippet.php"
-
           }]
           ,"chunks":[{
             "name": "timetableTpl"
@@ -30,6 +26,18 @@
           },{
             "name": "sessionTpl"
             ,"file": "session.chunk.tpl"
+          },{
+            "name": "tableHeaderRowTpl"
+            ,"file": "tableheaderrow.chunk.tpl"
+          },{
+            "name": "tableSessionRowTpl"
+          ,"file": "tablesessionrow.chunk.tpl"
+          },{
+            "name": "tableSessionTpl"
+          ,"file": "tablesession.chunk.tpl"
+          },{
+            "name": "tableTimetableTpl"
+          ,"file": "tabletimetable.chunk.tpl"
           }]
         },
 

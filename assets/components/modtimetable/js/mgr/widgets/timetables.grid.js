@@ -20,7 +20,7 @@ modTimetable.grid.Timetables = function(config) {
         }
         ,save_action: 'mgr/timetable/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description','image','position']
+        ,fields: ['id','name','description','image','active','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -46,6 +46,17 @@ modTimetable.grid.Timetables = function(config) {
             ,dataIndex: 'description'
             ,width: 250
             ,editor: { xtype: 'textfield' }
+        },{
+            header: _('modtimetable.timetable.active')
+            ,dataIndex: 'active'
+            ,width: 50
+            ,renderer: function(value,metadata,record) {
+                if(value) {
+                    return '<i style="color:#4BB543;" class="icon icon-check"></i>';
+                } else {
+                    return '<i style="color:#FF0000;" class="icon icon-close"></i>';
+                }
+            }
         }/*,{
             header: _('modtimetable.timetable.image')
             ,dataIndex: 'image'
@@ -327,6 +338,12 @@ modTimetable.window.Timetable = function(config) {
                     xtype: 'textarea'
                     ,fieldLabel: _('description')
                     ,name: 'description'
+                    ,anchor: '100%'
+                },{
+                    xtype: 'xcheckbox'
+                    ,fieldLabel:'Active'
+                    ,name: 'active'
+                    ,checked: true
                     ,anchor: '100%'
                 },{
                     xtype: 'textfield'

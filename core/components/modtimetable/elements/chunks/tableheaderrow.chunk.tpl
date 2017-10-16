@@ -1,0 +1,1 @@
+<th><strong>[[+name]]</strong><br>[[+description]]<img src="[[+image]]"></th>
