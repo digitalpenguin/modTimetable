@@ -19,6 +19,10 @@ class modTimetable {
     public $sortdir = 'ASC';
     public $tableHeaderRow = array();
     public $tableRow = array();
+    public $cellOpenTag = '<td>';
+    public $cellCloseTag = '</td>';
+    public $rowOpenTag = '<tr>';
+    public $rowCloseTag = '</tr>';
 
     public function __construct(modX &$modx, array $options = array()) {
         $this->modx =& $modx;
@@ -158,9 +162,13 @@ class modTimetable {
         $c->where(array('timetable_id'=>$timetable->get('id')));
         $days = $this->modx->getCollection('modTimetableDay',$c);
 
-        $headerRow = '';
+        $headerRow = '<th></th>';
         $sessionRows = array();
         $dayIdx = 0;
+
+        // Grab array of session times that has been sorted and duplicates removed.
+        $sessionTimes = $this->getSessionTimes($days);
+
         foreach($days as $day) {
             $headerRow .= $this->modx->getChunk('tableHeaderRowTpl',$day->toArray());
 
@@ -172,29 +180,46 @@ class modTimetable {
             $sessionIdx = 0;
             // Make sure column is created even if no sessions.
             if(empty($sessions)) {
-                $sessionRows[$dayIdx][$sessionIdx] = '<td></td>';
+                $sessionRows[$dayIdx][$sessionIdx] = array();//$this->cellOpenTag.$this->cellCloseTag;
             }
+
             foreach($sessions as $session) {
-                $sessionRows[$dayIdx][$sessionIdx] = $this->modx->getChunk('tableSessionTpl',$session->toArray());
+                $sessionRows[$dayIdx][$sessionIdx] = $session->toArray();
                 $sessionIdx++;
             }
             $dayIdx++;
         }
 
-        $maxLength = $this->maxLength($sessionRows); // get the longest count of sessions in a day
+        echo '<pre>';
+        //print_r($sessionRows);
+
+        // get the longest count of sessions in a day //$maxLength = $this->maxLength($sessionRows);
+        $maxLength = count($sessionTimes);
 
         $rows='';
         for($sessionIdx=0;$sessionIdx<$maxLength;$sessionIdx++) {
-            $rows .= '<tr>';
+            $rows .= $this->rowOpenTag;
 
-            for($i=0;$i<count($sessionRows);$i++) {
-                if(empty($sessionRows[$i][$sessionIdx])) {
-                    $rows .= '<td></td>';
+            for($dayIdx=0;$dayIdx<count($sessionRows);$dayIdx++) {
+                // Set time in the first column. Values taken from the $sessionTimes array sorted earlier.
+                if ($dayIdx===0) {
+                    $rows .= '<td>' . $sessionTimes[$sessionIdx] . '</td>';
+                }
+
+                echo $sessionRows[$dayIdx][$sessionIdx]['start_time'].'<br>';
+                echo $sessionTimes[$sessionIdx];
+
+                // Checks for empty cells. Adds empty tags or adds value if there is one.
+                if (!empty($sessionRows[$dayIdx][$sessionIdx]) &&
+                    $sessionRows[$dayIdx][$sessionIdx]['start_time'] == $sessionTimes[$sessionIdx]) {
+                    $rows .= $this->modx->getChunk('tableSessionTpl', $sessionRows[$dayIdx][$sessionIdx]);
+
+
                 } else {
-                    $rows .= $sessionRows[$i][$sessionIdx];
+                    $rows .= $this->cellOpenTag.$this->cellCloseTag;
                 }
             }
-            $rows .= '</tr>';
+            $rows .= $this->rowCloseTag;
         }
         $this->modx->setPlaceholder('headerRow',$headerRow);
         $this->modx->setPlaceholder('sessionRows',$rows);
@@ -202,6 +227,11 @@ class modTimetable {
         return $output;
     }
 
+    /**
+     * Renders a view that contains all the sessions with the specified day from many timetables.
+     * @param string $day
+     * @return false|string
+     */
     public function getDayOfSessionsFromManyTimetables($day = '') {
         if(!$day) {
             $day = $this->getCurrentDay();
@@ -210,11 +240,20 @@ class modTimetable {
         return $output;
     }
 
+    /**
+     * Returns name of current Day.
+     * @return false|string
+     */
     public function getCurrentDay() {
         $day = date('l');
         return $day;
     }
 
+    /**
+     * Returns number of sessions within multi-dimensional array.
+     * @param $mdArray
+     * @return int
+     */
     public function maxLength($mdArray) {
         $max = 0;
         foreach($mdArray as $child) {
@@ -223,6 +262,32 @@ class modTimetable {
             }
         }
         return $max;
+    }
+
+    /**
+     * Gets all session times for the specified timetable, sorts time ascending then removes duplicates.
+     * @param $days
+     * @return array
+     */
+    public function getSessionTimes($days) {
+        $sessionTimes = array();
+        foreach($days as $day) {
+            $c = $this->modx->newQuery('modTimetableSession');
+            $c->where(array('day_id' => $day->get('id')));
+            $sessions = $this->modx->getCollection('modTimetableSession', $c);
+            foreach($sessions as $session) {
+                $sessionTimes[] = strtotime($session->get('start_time'));
+            }
+        }
+        sort($sessionTimes);
+        $sorted = array();
+        foreach ($sessionTimes as $sessionTime) {
+            $sorted[] = date('H:i',$sessionTime);
+        }
+        $sorted = array_unique($sorted);
+        echo '<pre>'; //TODO remove this
+        print_r($sorted); //TODO remove this
+        return $sorted;
     }
 
 }

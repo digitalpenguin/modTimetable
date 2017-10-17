@@ -28,16 +28,16 @@
             ,"file": "session.chunk.tpl"
           },{
             "name": "tableHeaderRowTpl"
-            ,"file": "tableheaderrow.chunk.tpl"
+            ,"file": "table/tableheaderrow.chunk.tpl"
           },{
             "name": "tableSessionRowTpl"
-          ,"file": "tablesessionrow.chunk.tpl"
+          ,"file": "table/tablesessionrow.chunk.tpl"
           },{
             "name": "tableSessionTpl"
-          ,"file": "tablesession.chunk.tpl"
+          ,"file": "table/tablesession.chunk.tpl"
           },{
             "name": "tableTimetableTpl"
-          ,"file": "tabletimetable.chunk.tpl"
+          ,"file": "table/tabletimetable.chunk.tpl"
           }]
         },
 
