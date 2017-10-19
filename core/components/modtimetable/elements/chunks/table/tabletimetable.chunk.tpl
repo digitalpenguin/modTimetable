@@ -2,10 +2,13 @@
     <h2>[[+name]]</h2>
     <h5>[[+description]]</h5>
     <table>
-        <tr>
-            [[+headerRow]]
-        </tr>
-
+        <thead>
+            <tr>
+                [[+headerRow]]
+            </tr>
+        </thead>
+        <tbody>
         [[+sessionRows]]
+        </tbody>
     </table>
 </div>

@@ -16,6 +16,10 @@ class modTimetableSessionUpdateProcessor extends modObjectUpdateProcessor {
         if (empty($name)) {
             $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.session_name_ns'));
         }
+        $startTime = $this->getProperty('start_time');
+        if (empty($startTime)) {
+            $this->addFieldError('start_time',$this->modx->lexicon('modtimetable.err.session_start_time_ns'));
+        }
         return parent::beforeSet();
     }
 }

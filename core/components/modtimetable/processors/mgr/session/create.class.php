@@ -26,8 +26,12 @@ class modTimetableSessionCreateProcessor extends modObjectCreateProcessor {
 
     public function beforeSave() {
         $name = $this->getProperty('name');
+        $startTime = $this->getProperty('start_time');
         if (empty($name)) {
             $this->addFieldError('name',$this->modx->lexicon('modtimetable.err.session_name_ns'));
+        }
+        if (empty($startTime)) {
+            $this->addFieldError('start_time',$this->modx->lexicon('modtimetable.err.session_start_time_ns'));
         }
         return parent::beforeSave();
     }

@@ -1,1 +1,1 @@
-<tr>[[+sessionRow]]</tr>
+[[+sessionRow]]
