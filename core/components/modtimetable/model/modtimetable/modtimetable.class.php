@@ -157,6 +157,14 @@ class modTimetable {
         return $this->cleanUp($outputSeparator,$timetableList,$toPlaceholder);
     }
 
+
+    /**
+     * Converts array of timetables to string and either returns or outputs to a placeholder.
+     * @param $outputSeparator
+     * @param $timetableList
+     * @param $toPlaceholder
+     * @return string
+     */
     public function cleanUp($outputSeparator,$timetableList,$toPlaceholder) {
         $output = implode($outputSeparator,$timetableList);
         if (!empty($toPlaceholder)) {
@@ -165,6 +173,7 @@ class modTimetable {
         }
         return $output;
     }
+
 
     /**
      * Render timetables as HTML tables
@@ -235,12 +244,12 @@ class modTimetable {
             $rows .= $this->rowCloseTag;
             $idx++;
         }
-
         $this->modx->setPlaceholder('headerRow',$headerRow);
         $this->modx->setPlaceholder('sessionRows',$rows);
         $output = $this->modx->getChunk('tableTimetableTpl',$timetable->toArray());
         return $output;
     }
+
 
     /**
      * Renders a view that contains all the sessions with the specified day from many timetables.
@@ -254,6 +263,7 @@ class modTimetable {
         $output = $day;
         return $output;
     }
+
 
     /**
      * Returns name of current Day.

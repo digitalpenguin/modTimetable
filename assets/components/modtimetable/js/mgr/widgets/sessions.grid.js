@@ -317,6 +317,7 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
 
         updateSession.fp.getForm().reset();
         updateSession.fp.getForm().setValues(this.menu.record);
+        updateSession.fp.getForm().findField('dayId').setValue(this.dayId);
         updateSession.show(e.target);
     }
     

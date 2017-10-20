@@ -79,6 +79,7 @@ $_lang['modtimetable.session.remove'] = 'Remove session';
 $_lang['modtimetable.session.backtodays'] = 'Back to Days List';
 $_lang['modtimetable.session.remove_confirm'] = 'Are you sure you want to remove this session?';
 $_lang['modtimetable.err.session_name_ae'] = 'A session already exists with that name.';
+$_lang['modtimetable.err.session_start_time_ae'] = 'A session already exists with that start time.';
 $_lang['modtimetable.err.session_nf'] = 'Session not found.';
 $_lang['modtimetable.err.session_name_ns'] = 'Name is not specified.';
 $_lang['modtimetable.err.session_remove'] = 'An error occurred while trying to remove the session.';
