@@ -1,5 +1,6 @@
 modTimetable.grid.Timetables = function(config) {
     config = config || {};
+    var me = this;
     this.actionColTpl = new Ext.XTemplate('<tpl for=".">'
         +'{control_buttons}'
             +'<tpl if="actions !== null">'
@@ -120,7 +121,7 @@ modTimetable.grid.Timetables = function(config) {
                                     ,newIndex: newIndex
                                 }
                                 ,listeners: {
-
+                                    'success': {fn:function() { me.refresh(); },scope:this}
                                 }
                             });
                         }

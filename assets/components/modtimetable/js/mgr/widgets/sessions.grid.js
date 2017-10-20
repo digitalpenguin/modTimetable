@@ -160,9 +160,10 @@ modTimetable.grid.Sessions = function(config) {
                                     ,idItem: records.pop().id
                                     ,oldIndex: oldIndex
                                     ,newIndex: newIndex
+                                    ,dayId: config.dayId
                                 }
                                 ,listeners: {
-
+                                    'success': {fn:function() { me.refresh(); },scope:this}
                                 }
                             });
                         }

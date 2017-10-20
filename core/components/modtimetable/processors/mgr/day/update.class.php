@@ -18,5 +18,7 @@ class modTimetableDayUpdateProcessor extends modObjectUpdateProcessor {
         }
         return parent::beforeSet();
     }
+
+
 }
 return 'modTimetableDayUpdateProcessor';

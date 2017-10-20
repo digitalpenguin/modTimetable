@@ -19,11 +19,11 @@ class modTimetableDayCreateProcessor extends modObjectCreateProcessor {
     }
 
     public function beforeSet(){
-        $items = $this->modx->getCollection($this->classKey);
-        $this->setProperty('position', count($items));
+        $days = $this->modx->getCollection($this->classKey, array(
+            'timetable_id'  =>  $this->timetableId
+        ));
+        $this->setProperty('position', count($days));
         $this->setProperty('timetable_id',$this->timetableId);
-        $this->setProperty('num_in_week',1);
-        $this->modx->log(1,print_r($this->getProperties(),true));
         return parent::beforeSet();
     }
 

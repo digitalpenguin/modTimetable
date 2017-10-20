@@ -14,13 +14,14 @@ class modTimetableReorderSessionUpdateProcessor extends modObjectProcessor {
         $idItem = $this->getProperty('idItem');
         $oldIndex = $this->getProperty('oldIndex');
         $newIndex = $this->getProperty('newIndex');
-
+        $dayId = $this->getProperty('dayId');
 
         $items = $this->modx->newQuery($this->classKey);
         $items->where(array(
                 "id:!=" => $idItem,
                 "position:>=" => min($oldIndex, $newIndex),
                 "position:<=" => max($oldIndex, $newIndex),
+                'day_id:=' => $dayId
             ));
 
         $items->sortby('position', 'ASC');

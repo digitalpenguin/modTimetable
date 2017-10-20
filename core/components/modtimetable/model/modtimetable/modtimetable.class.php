@@ -15,7 +15,7 @@ class modTimetable {
     public $timetableTpl = '';
     public $dayTpl = '';
     public $sessionTpl = '';
-    public $sortby = 'id';
+    public $sortby = 'position';
     public $sortdir = 'ASC';
     public $tableHeaderRow = array();
     public $tableRow = array();
@@ -85,8 +85,8 @@ class modTimetable {
             $this->timetableIds = explode(",",$timetables);
         }
         $this->timetableTpl = $timetableTpl;
-        $this->dayTpl = $timetableTpl;
-        $this->sessionTpl = $timetableTpl;
+        $this->dayTpl = $dayTpl;
+        $this->sessionTpl = $sessionTpl;
 
         // Render sessions for single day
         if($day != null) {
@@ -94,10 +94,12 @@ class modTimetable {
             return $this->getDayOfSessionsFromManyTimetables($day);
         }
 
-
         $c = $this->modx->newQuery('modTimetableTimetable');
         $c->sortby($this->sortby,$this->sortdir);
-        $c->where(array('id:IN'=>$this->timetableIds));
+        $c->where(array(
+            'id:IN'=>$this->timetableIds,
+            'active:='=>1
+        ));
         $timetables = $this->modx->getCollection('modTimetableTimetable',$c);
 
         $timetableList = array();
@@ -106,17 +108,25 @@ class modTimetable {
             foreach ($timetables as $timetable) {
                 $timetableList[] = $this->renderRows($timetable);
             }
+            // Convert output to a string and return.
             $output = $this->cleanup($outputSeparator,$timetableList,$toPlaceholder);
-
             return $output;
         }
 
+        if($this->timetableTpl ===null) $this->timetableTpl = 'timetableTpl';
+        if($this->dayTpl ===null) $this->dayTpl = 'dayTpl';
+        if($this->sessionTpl ===null) $this->sessionTpl = 'sessionTpl';
+
         foreach ($timetables as $timetable) {
             $timetableArray = $timetable->toArray();
+            //print_r($timetableArray);
             // Grab the days within each timetable
             $c = $this->modx->newQuery('modTimetableDay');
-            $c->sortby($sortBy,$sortDir);
-            $c->where(array('timetable_id'=>$timetableArray['id']));
+            $c->sortby($this->sortby,$this->sortdir);
+            $c->where(array(
+                'timetable_id'=>$timetableArray['id'],
+                'active:='=>1
+            ));
             $days = $this->modx->getCollection('modTimetableDay',$c);
             $dayArray = array();
             $dayList = array();
@@ -126,13 +136,16 @@ class modTimetable {
                 // Grab the sessions within each day
                 $c = $this->modx->newQuery('modTimetableSession');
                 $c->sortby($sortBy,$sortDir);
-                $c->where(array('day_id'=>$dayArray['id']));
+                $c->where(array(
+                    'day_id'=>$dayArray['id'],
+                    'active:='=>1
+                ));
                 $sessions = $this->modx->getCollection('modTimetableSession',$c);
                 $sessionArray = array();
                 $sessionList = array();
                 foreach($sessions as $session) {
                     $sessionArray = $session->toArray();
-                    $sessionList[] = $this->modx->getChunk($sessionTpl,$sessionArray);
+                    $sessionList[] = $this->modx->getChunk($this->sessionTpl,$sessionArray);
                 }
                 // Grab the day_id from the last iteration of the $sessionArray as they'll all be the same.
                 // We can then compare it with the current id of the day so we only get these sessions on the correct day.
@@ -141,7 +154,7 @@ class modTimetable {
                 } else {
                     $this->modx->setPlaceholder('sessions','');
                 }
-                $dayList[] = $this->modx->getChunk($dayTpl,$dayArray);
+                $dayList[] = $this->modx->getChunk($this->dayTpl,$dayArray);
             }
             // Grab the timetable_id from the last iteration of the $dayArray as they'll all be the same.
             // We can then compare it with the current id of the timetable so we only get these days on the correct timetable.
@@ -150,10 +163,9 @@ class modTimetable {
             } else {
                 $this->modx->setPlaceholder('days','');
             }
-            $timetableList[] = $this->modx->getChunk($timetableTpl,$timetableArray);
+            $timetableList[] = $this->modx->getChunk($this->timetableTpl,$timetableArray);
         }
-
-
+        // Convert output to string and return.
         return $this->cleanUp($outputSeparator,$timetableList,$toPlaceholder);
     }
 
@@ -184,7 +196,10 @@ class modTimetable {
 
         $c = $this->modx->newQuery('modTimetableDay');
         $c->sortby($this->sortby,$this->sortdir);
-        $c->where(array('timetable_id'=>$timetable->get('id')));
+        $c->where(array(
+            'timetable_id'=>$timetable->get('id'),
+            'active:='=>1
+        ));
         $days = $this->modx->getCollection('modTimetableDay',$c);
 
         $headerRow = '';
@@ -202,7 +217,10 @@ class modTimetable {
 
             $c = $this->modx->newQuery('modTimetableSession');
             $c->sortby($this->sortby,$this->sortdir);
-            $c->where(array('day_id'=>$day->get('id')));
+            $c->where(array(
+                'day_id'=>$day->get('id'),
+                'active:='=>1
+            ));
             $sessions = $this->modx->getCollection('modTimetableSession',$c);
 
             $sessionIdx = 0;

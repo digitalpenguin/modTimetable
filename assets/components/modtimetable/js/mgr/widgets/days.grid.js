@@ -1,5 +1,6 @@
 modTimetable.grid.Days = function(config) {
     config = config || {};
+    var me = this;
     this.actionColTpl = new Ext.XTemplate('<tpl for=".">'
         +'{control_buttons}'
             +'<tpl if="actions !== null">'
@@ -122,9 +123,10 @@ modTimetable.grid.Days = function(config) {
                                     ,idItem: records.pop().id
                                     ,oldIndex: oldIndex
                                     ,newIndex: newIndex
+                                    ,timetableId: config.timetableId
                                 }
                                 ,listeners: {
-
+                                    'success': {fn:function() { me.refresh(); },scope:this}
                                 }
                             });
                         }
