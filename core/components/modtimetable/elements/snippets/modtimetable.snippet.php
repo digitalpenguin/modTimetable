@@ -18,4 +18,6 @@ $sortDir = $modx->getOption('sortDir',$scriptProperties,'ASC');
 $outputSeparator = $modx->getOption('outputSeparator',$scriptProperties,"\n");
 $toPlaceholder = $modx->getOption('toPlaceholder',$scriptProperties,false);
 
-return $modtimetable->getTimetables($timetables,$day,$renderTable,$timetableTpl,$dayTpl,$sessionTpl,$sortBy,$sortDir,$outputSeparator,$toPlaceholder);
+return $modtimetable->getTimetables($timetables,$day,$renderTable,
+    $timetableTpl,$dayTpl,$sessionTpl,
+    $sortBy,$sortDir,$outputSeparator,$toPlaceholder);

@@ -21,7 +21,7 @@ modTimetable.grid.Days = function(config) {
         }
         ,save_action: 'mgr/day/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description','num_in_week','image','active','position']
+        ,fields: ['id','name','description','image','active','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true

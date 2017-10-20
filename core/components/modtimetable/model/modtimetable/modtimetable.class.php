@@ -24,6 +24,7 @@ class modTimetable {
     public $rowOpenTag = '<tr>';
     public $rowCloseTag = '</tr>';
     private $renderTimesCol = true;
+    private $outputSeparator = '<br>';
 
     public function __construct(modX &$modx, array $options = array()) {
         $this->modx =& $modx;
@@ -81,18 +82,14 @@ class modTimetable {
     public function getTimetables($timetables, $day, $renderTable, $timetableTpl, $dayTpl,
                                   $sessionTpl, $sortBy, $sortDir, $outputSeparator, $toPlaceholder) {
 
+        $this->outputSeparator = $outputSeparator;
+
         if(!empty($timetables)) {
             $this->timetableIds = explode(",",$timetables);
         }
         $this->timetableTpl = $timetableTpl;
         $this->dayTpl = $dayTpl;
         $this->sessionTpl = $sessionTpl;
-
-        // Render sessions for single day
-        if($day != null) {
-            $this->singleDay=true;
-            return $this->getDayOfSessionsFromManyTimetables($day);
-        }
 
         $c = $this->modx->newQuery('modTimetableTimetable');
         $c->sortby($this->sortby,$this->sortdir);
@@ -101,6 +98,12 @@ class modTimetable {
             'active:='=>1
         ));
         $timetables = $this->modx->getCollection('modTimetableTimetable',$c);
+
+        // Render sessions for single day
+        if($day != null) {
+            $this->singleDay=true;
+            return $this->getDayOfSessionsFromManyTimetables($day,$timetables);
+        }
 
         $timetableList = array();
         // If selected render timetable output in rows for displaying as HTML table
@@ -113,6 +116,8 @@ class modTimetable {
             return $output;
         }
 
+
+        // if chunks not specified, load defaults for this option
         if($this->timetableTpl ===null) $this->timetableTpl = 'timetableTpl';
         if($this->dayTpl ===null) $this->dayTpl = 'dayTpl';
         if($this->sessionTpl ===null) $this->sessionTpl = 'sessionTpl';
@@ -135,7 +140,7 @@ class modTimetable {
 
                 // Grab the sessions within each day
                 $c = $this->modx->newQuery('modTimetableSession');
-                $c->sortby($sortBy,$sortDir);
+                $c->sortby($this->sortby,$this->sortdir);
                 $c->where(array(
                     'day_id'=>$dayArray['id'],
                     'active:='=>1
@@ -193,7 +198,6 @@ class modTimetable {
      * @return string
      */
     public function renderRows($timetable) {
-
         $c = $this->modx->newQuery('modTimetableDay');
         $c->sortby($this->sortby,$this->sortdir);
         $c->where(array(
@@ -201,20 +205,15 @@ class modTimetable {
             'active:='=>1
         ));
         $days = $this->modx->getCollection('modTimetableDay',$c);
-
         $headerRow = '';
         // Render header for times col if enabled.
         if($this->renderTimesCol) $headerRow = '<th></th>';
-
         $sessionRows = array();
         $dayIdx = 0;
-
         // Grab array of session times that has been sorted and duplicates removed.
         $sessionTimes = $this->getSessionTimes($days);
-
         foreach($days as $day) {
             $headerRow .= $this->modx->getChunk('tableHeaderRowTpl',$day->toArray());
-
             $c = $this->modx->newQuery('modTimetableSession');
             $c->sortby($this->sortby,$this->sortdir);
             $c->where(array(
@@ -222,13 +221,11 @@ class modTimetable {
                 'active:='=>1
             ));
             $sessions = $this->modx->getCollection('modTimetableSession',$c);
-
             $sessionIdx = 0;
             // Make sure column is created even if no sessions.
             if(empty($sessions)) {
                 $sessionRows[$dayIdx][$sessionIdx] = array();
             }
-
             foreach($sessions as $session) {
                 $sessionArray = $session->toArray();
                 $sessionRows[$dayIdx][$sessionIdx] = $sessionArray;
@@ -243,7 +240,6 @@ class modTimetable {
         $grid = $this->prepareGridWithSessionTimes($sessionTimes,$numOfCols);
         // Populate grid with session info added to correct coordinates.
         $grid = $this->populateGridWithSessions($grid,$sessionRows,$numOfRows,$numOfCols);
-
         $rows='';
         $idx = 0;
         foreach($grid as $rowArray) {
@@ -272,13 +268,62 @@ class modTimetable {
     /**
      * Renders a view that contains all the sessions with the specified day from many timetables.
      * @param string $day
+     * @param array $timetables
      * @return false|string
      */
-    private function getDayOfSessionsFromManyTimetables($day = '') {
-        if(!$day) {
+    private function getDayOfSessionsFromManyTimetables($day,$timetables) {
+        if($day == 'today') {
             $day = $this->getCurrentDay();
         }
-        $output = $day;
+
+        // if chunks not specified, load defaults for this option
+        if($this->sessionTpl ===null) $this->sessionTpl = 'singleDaySessionTpl';
+        $sessionList = array();
+        foreach($timetables as $timetable) {
+            $timetableArray = $timetable->toArray();
+            // Grab the specified day within each timetable
+            $c = $this->modx->newQuery('modTimetableDay');
+            $c->sortby($this->sortby,$this->sortdir);
+            $c->where(array(
+                'timetable_id'  => $timetableArray['id'],
+                'active:='      => 1,
+                'name:='        => $day
+            ));
+            $days = $this->modx->getCollection('modTimetableDay',$c);
+            foreach($days as $day) {
+                $dayArray = $day->toArray();
+                // Grab the sessions within each day
+                $c = $this->modx->newQuery('modTimetableSession');
+                $c->sortby('start_time', 'ASC');
+                $c->where(array(
+                    'day_id' => $dayArray['id'],
+                    'active:=' => 1
+                ));
+                $sessions = $this->modx->getCollection('modTimetableSession', $c);
+                foreach ($sessions as $session) {
+                    $sessionList[] = $session;
+                }
+
+            }
+
+        }
+
+        // Sort sessions from all timetables by start_time
+        function cmp($a, $b) {
+            return strcmp($a->start_time, $b->start_time);
+        }
+        usort($sessionList, "cmp");
+
+        $sessionArrays = array();
+        foreach($sessionList as $session) {
+            $sessionArrays[] = $this->modx->getChunk($this->sessionTpl, $session->toArray());
+        }
+
+        $output = implode($this->outputSeparator,$sessionArrays);
+        if (!empty($toPlaceholder)) {
+            $this->modx->setPlaceholder($toPlaceholder,$output);
+            return '';
+        }
         return $output;
     }
 

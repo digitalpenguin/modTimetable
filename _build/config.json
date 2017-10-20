@@ -38,6 +38,9 @@
           },{
             "name": "tableTimetableTpl"
           ,"file": "table/tabletimetable.chunk.tpl"
+          },{
+            "name": "singleDaySessionTpl"
+          ,"file": "singleday/singledaysession.chunk.tpl"
           }]
         },
 
