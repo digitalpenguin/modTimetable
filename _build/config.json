@@ -45,35 +45,25 @@
         },
 
         "systemSettings": [{
-            "key": "jquery_source",
+            "key": "timepicker_minute_interval",
             "type": "textfield",
-            "area": "datetimepicker",
-            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
-        },{
-            "key": "datetimepicker_js_source",
-            "type": "textfield",
-            "area": "datetimepicker",
-            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.full.min.js"
-        },{
-            "key": "datetimepicker_css_source",
-            "type": "textfield",
-            "area": "datetimepicker",
-            "value": "https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.4/build/jquery.datetimepicker.min.css"
-        },{
-            "key": "datetimepicker_minute_interval",
-            "type": "textfield",
-            "area": "datetimepicker",
+            "area": "timepicker",
             "value": "30"
         },{
-            "key": "datetimepicker_time_format",
+            "key": "timepicker_min_time",
             "type": "textfield",
-            "area": "datetimepicker",
-            "value": "H:i"
+            "area": "timepicker",
+            "value": "12:30 AM"
         },{
-            "key": "datetimepicker_language",
+            "key": "timepicker_max_time",
             "type": "textfield",
-            "area": "datetimepicker",
-            "value": "en"
+            "area": "timepicker",
+            "value": "11:30 PM"
+        },{
+            "key": "timepicker_format",
+            "type": "textfield",
+            "area": "timepicker",
+            "value": "g:i A"
         }]
     }
     

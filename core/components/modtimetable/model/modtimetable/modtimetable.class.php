@@ -46,9 +46,10 @@ class modTimetable {
             'jsUrl' => $assetsUrl . 'js/',
             'cssUrl' => $assetsUrl . 'css/',
             'connectorUrl' => $assetsUrl . 'connector.php',
-            'datetimepicker_default_time' => $this->getOption('datetimepicker_default_time'),
-            'datetimepicker_minute_interval' => $this->getOption('datetimepicker_minute_interval'),
-            'datetimepicker_time_format' => $this->getOption('datetimepicker_time_format')
+            'timepicker_minute_interval' => (integer)$this->getOption('timepicker_minute_interval'),
+            'timepicker_format' => $this->getOption('timepicker_format'),
+            'timepicker_min_time' => $this->getOption('timepicker_min_time'),
+            'timepicker_max_time' => $this->getOption('timepicker_max_time')
         ), $options);
 
         $this->modx->addPackage('modtimetable', $this->getOption('modelPath'));

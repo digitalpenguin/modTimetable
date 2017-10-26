@@ -46,33 +46,21 @@ modTimetable.grid.Sessions = function(config) {
             header: _('modtimetable.session.start_time')
             ,dataIndex: 'start_time'
             ,width: 100
-            ,editor: { xtype: 'textfield',cls: 'datetimepicker' }
-            ,listeners:{
-                'dblclick':function() {
-                    jQuery('.datetimepicker').datetimepicker({
-                        datepicker: false,
-                        format: modTimetable.config.datetimepicker_time_format,
-                        formatTime: modTimetable.config.datetimepicker_time_format,
-                        step: modTimetable.config.datetimepicker_minute_interval,
-                        lang: modTimetable.config.datetimepicker_language
-                    });
-                }
+            ,editor: { xtype: 'timefield'
+                ,format: modTimetable.config.timepicker_format
+                ,increment: modTimetable.config.timepicker_minute_interval
+                ,minValue: modTimetable.config.timepicker_min_time
+                ,maxValue: modTimetable.config.timepicker_max_time
             }
         },{
             header: _('modtimetable.session.end_time')
             ,dataIndex: 'end_time'
             ,width: 100
-            ,editor: { xtype: 'textfield',cls: 'datetimepicker' }
-            ,listeners:{
-                'dblclick':function() {
-                    jQuery('.datetimepicker').datetimepicker({
-                        datepicker: false,
-                        format: modTimetable.config.datetimepicker_time_format,
-                        formatTime: modTimetable.config.datetimepicker_time_format,
-                        step: modTimetable.config.datetimepicker_minute_interval,
-                        lang: modTimetable.config.datetimepicker_language
-                    });
-                }
+            ,editor: { xtype: 'timefield'
+                ,format: modTimetable.config.timepicker_format
+                ,increment: modTimetable.config.timepicker_minute_interval
+                ,minValue: modTimetable.config.timepicker_min_time
+                ,maxValue: modTimetable.config.timepicker_max_time
             }
         },{
             header: _('modtimetable.session.teacher')
@@ -278,15 +266,6 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
         var createSession = MODx.load({
             xtype: 'modtimetable-window-session'
             ,listeners: {
-                'show': function() {
-                    jQuery('.datetimepicker').datetimepicker({
-                        datepicker: false,
-                        format: modTimetable.config.datetimepicker_time_format,
-                        formatTime: modTimetable.config.datetimepicker_time_format,
-                        step: modTimetable.config.datetimepicker_minute_interval,
-                        lang: modTimetable.config.datetimepicker_language
-                    });
-                },
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
@@ -303,15 +282,6 @@ Ext.extend(modTimetable.grid.Sessions,MODx.grid.Grid,{
             ,action: 'mgr/session/update'
             ,record: this.menu.record
             ,listeners: {
-                'show': function() {
-                    jQuery('.datetimepicker').datetimepicker({
-                        datepicker: false,
-                        format: modTimetable.config.datetimepicker_time_format,
-                        formatTime: modTimetable.config.datetimepicker_time_format,
-                        step: modTimetable.config.datetimepicker_minute_interval,
-                        lang: modTimetable.config.datetimepicker_language
-                    });
-                },
                 'success': {fn:function() { this.refresh(); },scope:this}
             }
         });
@@ -390,20 +360,26 @@ modTimetable.window.Session = function(config) {
                         layout: 'form'
                         ,columnWidth: .5
                         ,items: [{
-                            xtype: 'textfield'
+                            xtype: 'timefield'
                             ,fieldLabel: _('modtimetable.session.start_time')
-                            ,cls:'datetimepicker'
                             ,name: 'start_time'
+                            ,format: modTimetable.config.timepicker_format
+                            ,increment: modTimetable.config.timepicker_minute_interval
+                            ,minValue: modTimetable.config.timepicker_min_time
+                            ,maxValue: modTimetable.config.timepicker_max_time
                             ,anchor: '100%'
                         }]
                     },{
                         layout: 'form'
                         ,columnWidth: .5
                         ,items: [{
-                            xtype: 'textfield'
+                            xtype: 'timefield'
                             ,fieldLabel: _('modtimetable.session.end_time')
-                            ,cls:'datetimepicker'
                             ,name: 'end_time'
+                            ,format: modTimetable.config.timepicker_format
+                            ,increment: modTimetable.config.timepicker_minute_interval
+                            ,minValue: modTimetable.config.timepicker_min_time
+                            ,maxValue: modTimetable.config.timepicker_max_time
                             ,anchor: '100%'
                         }]
                     }]

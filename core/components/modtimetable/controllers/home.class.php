@@ -22,9 +22,6 @@ class modTimetableHomeManagerController extends modTimetableBaseManagerControlle
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/timetables.grid.js');
         $this->addJavascript($this->modtimetable->getOption('jsUrl').'mgr/widgets/home.panel.js');
 
-        $this->addJavascript($this->modx->getOption('modtimetable.jquery_source'));
-        $this->addJavascript($this->modx->getOption('modtimetable.datetimepicker_js_source'));
-
         $this->addLastJavascript($this->modtimetable->getOption('jsUrl').'mgr/sections/home.js');
 
     }
