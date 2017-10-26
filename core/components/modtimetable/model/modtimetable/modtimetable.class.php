@@ -253,7 +253,7 @@ class modTimetable {
                 if(!empty($rowArray[$i]['name'])){
                     $rows .= $this->modx->getChunk('tableSessionTpl', $rowArray[$i]);
                 } else {
-                    $rows .= '<td> - </td>';
+                    $rows .= '<td></td>';
                 }
             }
             $rows .= $this->rowCloseTag;
@@ -371,7 +371,8 @@ class modTimetable {
         sort($sessionTimes);
         $sorted = array();
         foreach ($sessionTimes as $sessionTime) {
-            $sorted[] = date('H:i',$sessionTime);
+            //$sorted[] = date('H:i',$sessionTime);
+            $sorted[] = date($this->getOption('timepicker_format'),$sessionTime);
         }
         //$sorted = array_unique($sorted);
         $sorted = array_values(array_unique($sorted));
