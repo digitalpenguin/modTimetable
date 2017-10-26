@@ -268,17 +268,23 @@ class modTimetable {
 
     /**
      * Renders a view that contains all the sessions with the specified day from many timetables.
-     * @param string $day
+     * If day value is auto, first get results from current day, if not then next available day.
+     * Current day gets a 'Today' placeholder.
+     * Tomorrow gets a 'tomorrow' placeholder.
+     * @param string $dayName
      * @param array $timetables
      * @return false|string
      */
-    private function getDayOfSessionsFromManyTimetables($day,$timetables) {
-        if($day == 'today') {
-            $day = $this->getCurrentDay();
-        }
-
+    private function getDayOfSessionsFromManyTimetables($dayName,$timetables) {
         // if chunks not specified, load defaults for this option
         if($this->sessionTpl ===null) $this->sessionTpl = 'singleDaySessionTpl';
+
+        if($dayName == 'auto') {
+            $dayName = $this->getNextAvailableDay();
+            if($dayName === false) {
+                $dayName = $this->getNextAvailableDay(true);
+            }
+        }
         $sessionList = array();
         foreach($timetables as $timetable) {
             $timetableArray = $timetable->toArray();
@@ -288,7 +294,7 @@ class modTimetable {
             $c->where(array(
                 'timetable_id'  => $timetableArray['id'],
                 'active:='      => 1,
-                'name:='        => $day
+                'name:='        => $dayName
             ));
             $days = $this->modx->getCollection('modTimetableDay',$c);
             foreach($days as $day) {
@@ -328,6 +334,71 @@ class modTimetable {
         return $output;
     }
 
+    /**
+     * Returns the name of the next available day starting with today.
+     * If today is not active or has no sessions, it tries the next according the the position value.
+     * If the last day is not active or has no sessions, the first will return.
+     *
+     * This function will loop through the days once. If it doesn't find it it will return false.
+     * If the $todayFound param is set to true, it won't care about today and just iterate from the first day of the week.
+     * @param bool $todayFound
+     * @return string
+     */
+    public function getNextAvailableDay($todayFound = false) {
+        $dayName = $this->getCurrentDay();
+        $c = $this->modx->newQuery('modTimetableDay');
+        $c->sortby('position','ASC');
+        $c->where(array(
+            'timetable_id:IN'   => $this->timetableIds
+        ));
+        $days = $this->modx->getCollection('modTimetableDay',$c);
+        $numOfDays = count($days);
+        $idx=0;
+        foreach($days as $day) {
+            $idx++;
+            //echo $numOfDays;
+            //echo $idx;
+            if($day->get('name') == $dayName) {
+                $todayFound = true;
+                if($this->hasSessions($day)) {
+                    return $day->get('name');
+                }
+            } else if($todayFound) {
+                if($this->hasSessions($day)) {
+                    return $day->get('name');
+                }
+            }
+            if($idx == $numOfDays) {
+                if($this->hasSessions($day)) {
+                    return $day->get('name');
+                } else {
+                    return false;
+                }
+            }
+        }
+        return $dayName;
+    }
+
+    /**
+     * Checks that a day is both active and has active sessions.
+     * @param $day
+     * @return bool
+     */
+    public function hasSessions($day) {
+        $c = $this->modx->newQuery('modTimetableSession');
+        $c->sortby('start_time', 'ASC');
+        $c->where(array(
+            'day_id' => $day->get('id'),
+            'active:=' => 1
+        ));
+        $numOfSessions = $this->modx->getCount('modTimetableSession',$c);
+        if($numOfSessions > 0 && $day->get('active')) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     /**
      * Returns name of current Day.
@@ -374,11 +445,8 @@ class modTimetable {
             //$sorted[] = date('H:i',$sessionTime);
             $sorted[] = date($this->getOption('timepicker_format'),$sessionTime);
         }
-        //$sorted = array_unique($sorted);
         $sorted = array_values(array_unique($sorted));
 
-        //echo "<pre>";
-        //print_r($sorted);
         return $sorted;
     }
 
