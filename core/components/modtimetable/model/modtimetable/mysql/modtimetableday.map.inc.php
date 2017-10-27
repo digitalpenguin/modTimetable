@@ -10,10 +10,18 @@ $xpdo_meta_map['modTimetableDay']= array (
   'fields' => 
   array (
     'timetable_id' => NULL,
+    'day_num' => NULL,
   ),
   'fieldMeta' => 
   array (
     'timetable_id' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '10',
+      'phptype' => 'integer',
+      'null' => false,
+    ),
+    'day_num' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',

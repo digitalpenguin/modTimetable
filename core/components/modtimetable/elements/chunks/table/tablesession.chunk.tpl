@@ -4,5 +4,4 @@
     <span>Start: [[+start_time]]</span>
     [[+description]]
     <img src="[[+image]]">
-
 </td>

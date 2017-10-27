@@ -13,6 +13,7 @@
     </object>
     <object class="modTimetableDay" table="modtimetable_days" extends="modTimetableObject">
         <field key="timetable_id" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <field key="day_num" dbtype="int" precision="10" phptype="integer" null="false"/>
         <index alias="timetable_id" name="timetable_id" primary="false" unique="false" type="BTREE">
             <column key="timetable_id" length="" collation="A" null="false" />
         </index>

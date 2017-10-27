@@ -21,7 +21,7 @@ modTimetable.grid.Days = function(config) {
         }
         ,save_action: 'mgr/day/updatefromgrid'
         ,autosave: true
-        ,fields: ['id','name','description','image','active','position']
+        ,fields: ['id','name','day_num','description','image','active','position']
         ,autoHeight: true
         ,paging: true
         ,remoteSort: true
@@ -35,6 +35,11 @@ modTimetable.grid.Days = function(config) {
             header: _('modtimetable.day.name')
             ,dataIndex: 'name'
             ,width: 100
+            ,editor: { xtype: 'textfield' }
+        },{
+            header: _('modtimetable.day.day_order')
+            ,dataIndex: 'day_num'
+            ,width: 60
             ,editor: { xtype: 'textfield' }
         },{
             header: _('modtimetable.day.action')
@@ -75,6 +80,7 @@ modTimetable.grid.Days = function(config) {
             header: _('modtimetable.day.position')
             ,dataIndex: 'position'
             ,width: 50
+            ,hidden:true
             ,editor: { xtype: 'numberfield', allowDecimal: false, allowNegative: false }
         }]
         ,tbar: [{
@@ -369,6 +375,11 @@ modTimetable.window.Day = function(config) {
                     xtype: 'textfield'
                     ,fieldLabel: _('name')
                     ,name: 'name'
+                    ,anchor: '100%'
+                },{
+                    xtype: 'textfield'
+                    ,fieldLabel: _('modtimetable.day.day_num')
+                    ,name: 'day_num'
                     ,anchor: '100%'
                 },{
                     xtype: 'textarea'

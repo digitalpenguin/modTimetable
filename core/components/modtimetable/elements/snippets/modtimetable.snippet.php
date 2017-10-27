@@ -13,11 +13,12 @@ $renderTable = $modx->getOption('renderTable',$scriptProperties,0);
 $timetableTpl = $modx->getOption('timetableTpl',$scriptProperties,null);
 $dayTpl = $modx->getOption('dayTpl',$scriptProperties,null);
 $sessionTpl = $modx->getOption('sessionTpl',$scriptProperties,null);
+$headerRowTpl = $modx->getOption('tableHeaderRowTpl',$scriptProperties,null);
 $sortBy = $modx->getOption('sortBy',$scriptProperties,'position');
 $sortDir = $modx->getOption('sortDir',$scriptProperties,'ASC');
 $outputSeparator = $modx->getOption('outputSeparator',$scriptProperties,"\n");
 $toPlaceholder = $modx->getOption('toPlaceholder',$scriptProperties,false);
 
 return $modtimetable->getTimetables($timetables,$day,$renderTable,
-    $timetableTpl,$dayTpl,$sessionTpl,
+    $timetableTpl,$dayTpl,$sessionTpl,$headerRowTpl,
     $sortBy,$sortDir,$outputSeparator,$toPlaceholder);

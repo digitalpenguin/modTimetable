@@ -38,6 +38,8 @@ $_lang['modtimetable.day.intro_msg'] = 'Manage your Days.';
 $_lang['modtimetable.day.managedays'] = 'Manage the days belonging to';
 $_lang['modtimetable.day.timetable_days'] = 'Days';
 $_lang['modtimetable.day.name'] = 'Name';
+$_lang['modtimetable.day.day_num'] = 'Day Number';
+$_lang['modtimetable.day.day_order'] = 'Day Order';
 $_lang['modtimetable.day.description'] = 'Description';
 $_lang['modtimetable.day.days'] = 'Days';
 $_lang['modtimetable.day.active'] = 'Active';
@@ -54,6 +56,7 @@ $_lang['modtimetable.day.remove_confirm'] = 'Are you sure you want to remove thi
 $_lang['modtimetable.err.day_name_ae'] = 'A day already exists with that name.';
 $_lang['modtimetable.err.day_nf'] = 'Day not found.';
 $_lang['modtimetable.err.day_name_ns'] = 'Name is not specified.';
+$_lang['modtimetable.err.day_num_ns'] = 'Name is not specified.';
 $_lang['modtimetable.err.day_remove'] = 'An error occurred while trying to remove the day.';
 $_lang['modtimetable.err.day_save'] = 'An error occurred while trying to save the day.';
 

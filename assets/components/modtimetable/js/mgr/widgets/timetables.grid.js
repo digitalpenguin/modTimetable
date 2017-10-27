@@ -75,6 +75,7 @@ modTimetable.grid.Timetables = function(config) {
             header: _('modtimetable.timetable.position')
             ,dataIndex: 'position'
             ,width: 50
+            ,hidden:true
             ,editor: { xtype: 'numberfield', allowDecimal: false, allowNegative: false }
         }]
         ,tbar: [{

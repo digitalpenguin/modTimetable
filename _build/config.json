@@ -30,9 +30,6 @@
             "name": "tableHeaderRowTpl"
             ,"file": "table/tableheaderrow.chunk.tpl"
           },{
-            "name": "tableSessionRowTpl"
-          ,"file": "table/tablesessionrow.chunk.tpl"
-          },{
             "name": "tableSessionTpl"
           ,"file": "table/tablesession.chunk.tpl"
           },{
@@ -63,7 +60,7 @@
             "key": "timepicker_format",
             "type": "textfield",
             "area": "timepicker",
-            "value": "g:i A"
+            "value": "h:i A"
         }]
     }
     

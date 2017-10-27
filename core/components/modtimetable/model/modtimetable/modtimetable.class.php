@@ -12,9 +12,10 @@ class modTimetable {
     public $options = array();
     public $timetableIds = array();
     public $singleDay = 0;
-    public $timetableTpl = '';
-    public $dayTpl = '';
-    public $sessionTpl = '';
+    public $timetableTpl = null;
+    public $dayTpl = null;
+    public $sessionTpl = null;
+    public $headerRowTpl = null;
     public $sortby = 'position';
     public $sortdir = 'ASC';
     public $tableHeaderRow = array();
@@ -81,7 +82,7 @@ class modTimetable {
     }
 
     public function getTimetables($timetables, $day, $renderTable, $timetableTpl, $dayTpl,
-                                  $sessionTpl, $sortBy, $sortDir, $outputSeparator, $toPlaceholder) {
+                                  $sessionTpl,$headerRowTpl, $sortBy, $sortDir, $outputSeparator, $toPlaceholder) {
 
         $this->outputSeparator = $outputSeparator;
 
@@ -91,6 +92,7 @@ class modTimetable {
         $this->timetableTpl = $timetableTpl;
         $this->dayTpl = $dayTpl;
         $this->sessionTpl = $sessionTpl;
+        $this->headerRowTpl = $headerRowTpl;
 
         $c = $this->modx->newQuery('modTimetableTimetable');
         $c->sortby($this->sortby,$this->sortdir);
@@ -109,6 +111,10 @@ class modTimetable {
         $timetableList = array();
         // If selected render timetable output in rows for displaying as HTML table
         if ($renderTable) {
+            // if chunks not specified, load defaults for rendering table
+            if($this->timetableTpl ===null) $this->timetableTpl = 'tableTimetableTpl';
+            if($this->headerRowTpl ===null) $this->headerRowTpl = 'tableHeaderRowTpl';
+            if($this->sessionTpl ===null) $this->sessionTpl = 'tableSessionTpl';
             foreach ($timetables as $timetable) {
                 $timetableList[] = $this->renderRows($timetable);
             }
@@ -214,7 +220,7 @@ class modTimetable {
         // Grab array of session times that has been sorted and duplicates removed.
         $sessionTimes = $this->getSessionTimes($days);
         foreach($days as $day) {
-            $headerRow .= $this->modx->getChunk('tableHeaderRowTpl',$day->toArray());
+            $headerRow .= $this->modx->getChunk($this->headerRowTpl,$day->toArray());
             $c = $this->modx->newQuery('modTimetableSession');
             $c->sortby($this->sortby,$this->sortdir);
             $c->where(array(
@@ -251,7 +257,7 @@ class modTimetable {
             }
             for($i=0;$i<count($rowArray);$i++) {
                 if(!empty($rowArray[$i]['name'])){
-                    $rows .= $this->modx->getChunk('tableSessionTpl', $rowArray[$i]);
+                    $rows .= $this->modx->getChunk($this->sessionTpl, $rowArray[$i]);
                 } else {
                     $rows .= '<td></td>';
                 }
@@ -261,7 +267,7 @@ class modTimetable {
         }
         $this->modx->setPlaceholder('headerRow',$headerRow);
         $this->modx->setPlaceholder('sessionRows',$rows);
-        $output = $this->modx->getChunk('tableTimetableTpl',$timetable->toArray());
+        $output = $this->modx->getChunk($this->timetableTpl,$timetable->toArray());
         return $output;
     }
 
@@ -310,9 +316,7 @@ class modTimetable {
                 foreach ($sessions as $session) {
                     $sessionList[] = $session;
                 }
-
             }
-
         }
 
         // Sort sessions from all timetables by start_time
@@ -345,9 +349,9 @@ class modTimetable {
      * @return string
      */
     public function getNextAvailableDay($todayFound = false) {
-        $dayName = $this->getCurrentDay();
+        $dayNum = $this->getCurrentDayNum();
         $c = $this->modx->newQuery('modTimetableDay');
-        $c->sortby('position','ASC');
+        $c->sortby('day_num','ASC');
         $c->where(array(
             'timetable_id:IN'   => $this->timetableIds
         ));
@@ -358,7 +362,7 @@ class modTimetable {
             $idx++;
             //echo $numOfDays;
             //echo $idx;
-            if($day->get('name') == $dayName) {
+            if($day->get('day_num') == $dayNum) {
                 $todayFound = true;
                 if($this->hasSessions($day)) {
                     return $day->get('name');
@@ -376,7 +380,7 @@ class modTimetable {
                 }
             }
         }
-        return $dayName;
+        return false;
     }
 
     /**
@@ -404,8 +408,17 @@ class modTimetable {
      * Returns name of current Day.
      * @return false|string
      */
-    private function getCurrentDay() {
+    private function getCurrentDayName() {
         $day = date('l');
+        return $day;
+    }
+
+    /**
+     * Returns name of current Day.
+     * @return false|string
+     */
+    private function getCurrentDayNum() {
+        $day = date('N');
         return $day;
     }
 

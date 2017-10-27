@@ -10,8 +10,18 @@ A user-friendly Custom Manager Page for inputting weekly timetable data with opt
 
 Render it in a HTML grid or straight to divs. Custom chunks available soon.
 
-Example Snippet call
+Example Snippet calls
 -------------
 [[!modTimetable? &timetables=\`1\` &renderTable=\`1\`]] 
+
+or 
+
+[[!modTimetable? 
+    &timetables=\`1,2\` 
+    &renderTable=\`1\` 
+    &tableHeaderRowTpl=\`myHeaderRowChunk\` 
+    &timetableTpl=\`myMainTimetableChunk\`
+    &sessionTpl=\`mySessionChunk\`
+]]
 
 
