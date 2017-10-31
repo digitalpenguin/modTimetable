@@ -12,10 +12,10 @@ Render it in a HTML grid or straight to divs. Custom chunks available soon.
 
 Example Snippet calls
 -------------
-[[!modTimetable? &timetables=\`1\` &renderTable=\`1\`]] 
+To show timetables with IDs 1 and 2 in a table:
+[[!modTimetable? &timetables=\`1,2\` &renderTable=\`1\`]] 
 
-or 
-
+or to include custom chunks:
 [[!modTimetable? 
     &timetables=\`1,2\` 
     &renderTable=\`1\` 
@@ -24,4 +24,17 @@ or
     &sessionTpl=\`mySessionChunk\`
 ]]
 
+To display sessions for a single day from multiple timetables:
+(This depends on what you set the day name as in the CMP.)
+[[!modTimetable?
+    &timetables=\`1,2\`
+    &day=\`Tuesday\`
+]]
+
+To display a single day from multiple timetables relative to the current day:
+(This will display the next "active" day that contains sessions.)
+[[!modTimetable?
+    &timetables=\`1,2\`
+    &day=\`auto\`
+]]
 

@@ -1,5 +1,9 @@
 Changelog for modTimetable.
 
+modTimetable 0.1.2
+==============
+Still pre-release but many bugs fixed
+
 modTimetable 0.0.1
 ==============
 - Initial release.
