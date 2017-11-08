@@ -219,10 +219,13 @@ class modTimetable {
         $dayIdx = 0;
         // Grab array of session times that has been sorted and duplicates removed.
         $sessionTimes = $this->getSessionTimes($days);
+        // Day names
+        $dayNames = array();
         foreach($days as $day) {
+            $dayNames[] = $day->get('name');
             $headerRow .= $this->modx->getChunk($this->headerRowTpl,$day->toArray());
             $c = $this->modx->newQuery('modTimetableSession');
-            $c->sortby($this->sortby,$this->sortdir);
+            $c->sortby('start_time',$this->sortdir);
             $c->where(array(
                 'day_id'=>$day->get('id'),
                 'active:='=>1
@@ -235,6 +238,8 @@ class modTimetable {
             }
             foreach($sessions as $session) {
                 $sessionArray = $session->toArray();
+                $sessionArray['day_num'] = $day->get('day_num');
+                $sessionArray['day_name'] = $day->get('name');
                 $sessionRows[$dayIdx][$sessionIdx] = $sessionArray;
                 $sessionIdx++;
             }
@@ -244,7 +249,7 @@ class modTimetable {
         $numOfRows = count($sessionTimes);
         $numOfCols = $dayIdx;
         // Get grid with correct dimensions and rows represented by the session times
-        $grid = $this->prepareGridWithSessionTimes($sessionTimes,$numOfCols);
+        $grid = $this->prepareGridWithSessionTimes($sessionTimes,$dayNames);
         // Populate grid with session info added to correct coordinates.
         $grid = $this->populateGridWithSessions($grid,$sessionRows,$numOfRows,$numOfCols);
         $rows='';
@@ -253,11 +258,11 @@ class modTimetable {
             $rows .= $this->rowOpenTag;
             // Check if time column should be rendered
             if($this->renderTimesCol) {
-                $rows .= '<td class="time-col">' . $sessionTimes[$idx] . '</td>';
+                $rows .= '<td class="time-td">' . $sessionTimes[$idx] . '</td>';
             }
-            for($i=0;$i<count($rowArray);$i++) {
-                if(!empty($rowArray[$i]['name'])){
-                    $rows .= $this->modx->getChunk($this->sessionTpl, $rowArray[$i]);
+            foreach($rowArray as $singleArray) {
+                if (!empty($singleArray['name'])) {
+                    $rows .= $this->modx->getChunk($this->sessionTpl, $singleArray);
                 } else {
                     $rows .= '<td></td>';
                 }
@@ -446,7 +451,11 @@ class modTimetable {
         $sessionTimes = array();
         foreach($days as $day) {
             $c = $this->modx->newQuery('modTimetableSession');
-            $c->where(array('day_id' => $day->get('id')));
+            $c->sortby('start_time',$this->sortdir);
+            $c->where(array(
+                'day_id'=>$day->get('id'),
+                'active:='=>1
+            ));
             $sessions = $this->modx->getCollection('modTimetableSession', $c);
             foreach($sessions as $session) {
                 $sessionTimes[] = strtotime($session->get('start_time'));
@@ -463,12 +472,12 @@ class modTimetable {
         return $sorted;
     }
 
-    private function prepareGridWithSessionTimes($sessionTimes,$numOfCols) {
+    private function prepareGridWithSessionTimes($sessionTimes,$dayNames) {
         $grid = array();
         for($i=0;$i<count($sessionTimes);$i++) {
             $row = array();
-            for($j=0;$j<$numOfCols;$j++) {
-                $row[] = '<td></td>';
+            for($j=0;$j<count($dayNames);$j++) {
+                $row[$dayNames[$j]] = '<td></td>';
             }
             $grid[$sessionTimes[$i]] = $row;
         }
@@ -478,18 +487,23 @@ class modTimetable {
     }
 
 
-    private function populateGridWithSessions($grid,$sessionRows,$numOfRows,$numOfCols) {
-        //Fill grid with session data
-        for($i=0;$i<$numOfCols;$i++) {
-            for($j=0;$j<count($sessionRows);$j++) {
-                // TODO: add a way to get multiple sessions into the same array element
-                $grid[$sessionRows[$i][$j]['start_time']][$i] = $sessionRows[$i][$j];
-
+    private function flip($arr) {
+        $out = array();
+        foreach ($arr as $key => $subarr) {
+            foreach ($subarr as $subkey => $subvalue) {
+                $out[$subkey][$key] = $subvalue;
             }
         }
-        // remove extra session row element added by loop. (Work-around for unknown bug in above loops)
-        // It always seems to be just one extra row so using array_pop() takes care of it.
-        array_pop($grid);
+        return $out;
+    }
+
+    private function populateGridWithSessions($grid,$sessionRows,$numOfRows,$numOfCols) {
+        //Fill grid with session data
+        foreach($sessionRows as $sessionRow) {
+            foreach($sessionRow as $session) {
+                $grid[$session['start_time']][$session['day_name']] = $session;
+            }
+        }
         return $grid;
     }
 }
