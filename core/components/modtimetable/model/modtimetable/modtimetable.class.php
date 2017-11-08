@@ -83,7 +83,6 @@ class modTimetable {
 
     public function getTimetables($timetables, $day, $renderTable, $timetableTpl, $dayTpl,
                                   $sessionTpl,$headerRowTpl, $sortBy, $sortDir, $outputSeparator, $toPlaceholder) {
-
         $this->outputSeparator = $outputSeparator;
 
         if(!empty($timetables)) {
@@ -289,6 +288,7 @@ class modTimetable {
     private function getDayOfSessionsFromManyTimetables($dayName,$timetables) {
         // if chunks not specified, load defaults for this option
         if($this->sessionTpl ===null) $this->sessionTpl = 'singleDaySessionTpl';
+        if($this->timetableTpl ===null) $this->timetableTpl = 'timetableTpl';
 
         if($dayName == 'auto') {
             $dayName = $this->getNextAvailableDay();
@@ -334,7 +334,6 @@ class modTimetable {
         foreach($sessionList as $session) {
             $sessionArrays[] = $this->modx->getChunk($this->sessionTpl, $session->toArray());
         }
-
         $output = implode($this->outputSeparator,$sessionArrays);
         if (!empty($toPlaceholder)) {
             $this->modx->setPlaceholder($toPlaceholder,$output);
@@ -354,12 +353,14 @@ class modTimetable {
      * @return string
      */
     public function getNextAvailableDay($todayFound = false) {
+
         $dayNum = $this->getCurrentDayNum();
         $c = $this->modx->newQuery('modTimetableDay');
         $c->sortby('day_num','ASC');
         $c->where(array(
             'timetable_id:IN'   => $this->timetableIds
         ));
+
         $days = $this->modx->getCollection('modTimetableDay',$c);
         $numOfDays = count($days);
         $idx=0;

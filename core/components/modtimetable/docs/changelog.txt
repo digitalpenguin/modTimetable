@@ -1,5 +1,10 @@
 Changelog for modTimetable.
 
+modTimetable 0.2.0
+==================
+- Fixed table rendering bug where certain days were disabled.
+- Added mtNextDayName snippet to return the next day name that has sessions.
+
 modTimetable 0.1.2
 ==============
 Still pre-release but many bugs fixed

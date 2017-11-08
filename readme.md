@@ -38,3 +38,8 @@ To display a single day from multiple timetables relative to the current day:
     &day=\`auto\`
 ]]
 
+
+NEW
+--
+A new snippet that returns the next day name that has active sessions:
+[[!mtNextDayName]]
