@@ -357,10 +357,11 @@ class modTimetable {
         $dayNum = $this->getCurrentDayNum();
         $c = $this->modx->newQuery('modTimetableDay');
         $c->sortby('day_num','ASC');
-        $c->where(array(
-            'timetable_id:IN'   => $this->timetableIds
-        ));
-
+        if(!empty($this->timetableIds)) { // possible fix for sql error if there are no timetables specified.
+            $c->where(array(
+                'timetable_id:IN' => $this->timetableIds
+            ));
+        }
         $days = $this->modx->getCollection('modTimetableDay',$c);
         $numOfDays = count($days);
         $idx=0;
