@@ -3,7 +3,7 @@
     "lowCaseName": "modtimetable",
     "description": "CMP enabled app to create simple weekly timetables for clubs.",
     "author": "Murray Wood",
-    "version": "0.2.0",
+    "version": "1.0.1-pl",
     "package":{
         "menus": [{
             "text": "modtimetable.menu.modtimetable"

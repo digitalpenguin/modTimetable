@@ -1,19 +1,19 @@
 ---------------------------------------
 modTimetable
 ---------------------------------------
-Version: 0.1.2
+Version: 1.0.1-pl
 Author: Murray Wood <murray@digitalpenguin.hk>
 ---------------------------------------
 
-For MODX Revolution 2.3+
+For MODX Revolution 2.6.5+
 
-Requires PHP 5.5+
+Requires PHP 7.1+
 
-Currently in Alpha. Use at own risk.
+
 
 A user-friendly Custom Manager Page for inputting weekly timetable data with options on how to display it on the web context.
 
-Render it in a HTML grid or straight to divs. Custom chunks available soon.
+Render it in a HTML grid or straight to divs.
 
 Example Snippet calls
 -------------
@@ -45,8 +45,6 @@ To display a single day from multiple timetables relative to the current day:
     &day=`auto`
 ]]
 
-NEW
-
-A new snippet that returns the next day name that has active sessions:
+A snippet that returns the next day name that has active sessions:
 [[!mtNextDayName]]
 

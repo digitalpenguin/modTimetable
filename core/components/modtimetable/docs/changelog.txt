@@ -1,5 +1,9 @@
 Changelog for modTimetable.
 
+modTimetable 1.0.1-pl
+==================
+- Fixed a bug that wouldn't allow description fields to save
+
 modTimetable 0.2.0
 ==================
 - Fixed table rendering bug where certain days were disabled.
